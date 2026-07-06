@@ -1,0 +1,66 @@
+.leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    border-radius: 4px;
+    overflow: hidden;
+
+    th, td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+    }
+
+    th {
+        background-color: #f4f4f4;
+        font-weight: 600;
+        color: #444;
+    }
+
+    tr:last-child td {
+        border-bottom: none;
+    }
+
+    .no-results {
+        text-align: center;
+        color: #777;
+        font-style: italic;
+    }
+}
+
+.player-name-link {
+    color: #1a1a1a;
+    text-decoration: none;
+    
+    &:hover {
+        text-decoration: underline;
+        color: #00bcd4;
+    }
+}
+
+.country-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.steam-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    color: #1078ff;
+    font-weight: 500;
+    transition: opacity 0.2s;
+
+    &:hover {
+        opacity: 0.8;
+    }
+
+    img {
+        width: 24px;
+        height: auto;
+    }
+}

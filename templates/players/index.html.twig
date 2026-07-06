@@ -1,15 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}SurfTimer Leaderboard{% endblock %}
+{% block title %}Active players{% endblock %}
 
 {% block body %}
-<div class="container" style="margin-top: 50px; font-family: sans-serif;">
-    <h1>Players</h1>
+<div class="container">
+    <h1>Active players</h1>
     <p>Total players: <strong>{{ players|length }}</strong></p>
 
-    <table border="1" cellpadding="10" cellspacing="0" style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+    <table class="leaderboard-table">
         <thead>
-            <tr style="background-color: #f4f4f4; text-align: left;">
+            <tr>
                 <th>Name</th>
                 <th>Country</th>
                 <th>Last Seen</th>
@@ -20,34 +20,37 @@
         <tbody>
             {% for player in players %}
                 <tr>
-                    <td><a href="{{ path('app_player_times', { 'id': player.id }) }}"><strong>{{ player.name }}</strong></a></td>
                     <td>
-                        <div style="display: flex; align-items: center; gap: 8px;">
+                        <a href="{{ path('app_player_times', { 'id': player.id }) }}" class="player-name-link">
+                            <strong>{{ player.name }}</strong>
+                        </a>
+                    </td>
+                    <td>
+                        <div class="country-cell">
                             <img 
                                 src="https://flagcdn.com/w20/{{ player.country|lower }}.png" 
                                 srcset="https://flagcdn.com/w40/{{ player.country|lower }}.png 2x"
                                 width="20" 
                                 alt="{{ player.country }}">
                             <span>{{ player.country }}</span>
-                    </div>
+                        </div>
                     </td>
                     <td>{{ player.lastSeenAgo }}</td>
                     <td>{{ player.connections }}</td>
                     <td>
                         <a href="https://steamcommunity.com/profiles/{{ player.steamId }}/" 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        style="display: inline-flex; align-items: center; gap: 6px; text-decoration: none; color: #1078ff; font-weight: 500;">
+                           target="_blank" 
+                           rel="noopener noreferrer" 
+                           class="steam-link">
                             
-                            <img src="https://cdn.iconscout.com/icon/free/png-256/free-steam-logo-icon-svg-download-png-1933796.png" width="35px">
-
+                            <img src="https://cdn.iconscout.com/icon/free/png-256/free-steam-logo-icon-svg-download-png-1933796.png" alt="Steam Logo">
                             <span>View Steam Profile</span>
                         </a>
                     </td>
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="6" style="text-align: center;">No players found in the database.</td>
+                    <td colspan="5" class="no-results">No players found in the database.</td>
                 </tr>
             {% endfor %}
         </tbody>
