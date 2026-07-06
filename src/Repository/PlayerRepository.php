@@ -15,4 +15,16 @@ class PlayerRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Player::class);
     }
+
+    /**
+     * Get players sorted by their last seen timestamp (most recent first)
+     * @return Player[]
+     */
+    public function getActivePlayers(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->orderBy('p.lastSeen', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 }
