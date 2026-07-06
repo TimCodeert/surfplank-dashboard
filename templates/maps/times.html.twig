@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Leaderboard for {{ map.name }}{% endblock %}
+
+{% block body %}
+<div class="container" style="margin-top: 50px; font-family: sans-serif;">
+    <h1>🏆 Leaderboard: {{ map.name }}</h1>
+    <p>Tier: {{ map.tier }} | Type: {{ map.isLinear ? 'Linear' : 'Staged' }}</p>
+
+    <table border="1" cellpadding="10" cellspacing="0" style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+        <thead>
+            <tr style="background-color: #f4f4f4; text-align: left;">
+                <th>Rank</th>
+                <th>Player</th>
+                <th>Country</th>
+                <th>Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for time in times %}
+                <tr>
+                    <td>#{{ loop.index }}</td> {# Twig telt automatisch de rank voor ons! #}
+                    <td><strong>{{ time.player.name }}</strong></td>
+                    <td>{{ time.player.country }}</td>
+                    <td><code>{{ time.formattedTime }}</code></td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4" style="text-align: center;">No times recorded yet on this map.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

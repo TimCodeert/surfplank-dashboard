@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Times for {{ player.name }}{% endblock %}
+
+{% block body %}
+<div class="container" style="margin-top: 50px; font-family: sans-serif;">
+    <h1>👤 Profile: {{ player.name }}</h1>
+
+    <h2>Personal Records & Ranks</h2>
+    <table border="1" cellpadding="10" cellspacing="0" style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+        <thead>
+            <tr style="background-color: #f4f4f4; text-align: left;">
+                <th>Rank</th>
+                <th>Map</th>
+                <th>Type</th>
+                <th>Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in times %}
+                {% set time = row[0] %}
+                {% set rank = row.rank %}
+                <tr>
+                    <td>
+                        <span style="font-weight: bold; color: {{ rank == 1 ? '#d4af37' : (rank == 2 ? '#aaa' : (rank == 3 ? '#cd7f32' : '#333')) }}">
+                            #{{ rank }}
+                        </span>
+                    </td>
+                    <td><strong>{{ time.map.name }}</strong></td>
+                    <td>{{ time.isBonus ? 'Bonus ' ~ time.bonusNumber : 'Main Run' }}</td>
+                    <td><code>{{ time.formattedTime }}</code></td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4" style="text-align: center;">This player has not set any times yet.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
