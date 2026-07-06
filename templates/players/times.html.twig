@@ -4,12 +4,10 @@
 
 {% block body %}
 <div class="container" style="margin-top: 50px; font-family: sans-serif;">
-    <h1>👤 Profile: {{ player.name }}</h1>
-
-    <h2>Personal Records & Ranks</h2>
-    <table border="1" cellpadding="10" cellspacing="0" style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+    <h1>{{ player.name }}</h1>
+    <table class="leaderboard-table">
         <thead>
-            <tr style="background-color: #f4f4f4; text-align: left;">
+            <tr>
                 <th>Rank</th>
                 <th>Map</th>
                 <th>Type</th>
@@ -32,7 +30,7 @@
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="4" style="text-align: center;">This player has not set any times yet.</td>
+                    <td colspan="4" class="no-results">This player has not set any times yet.</td>
                 </tr>
             {% endfor %}
         </tbody>

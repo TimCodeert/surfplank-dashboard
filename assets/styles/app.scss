@@ -11,5 +11,11 @@ body {
     padding: 0 20px;
 }
 
+.tag {
+    background: #eee;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
 @import 'navbar';
 @import 'players';

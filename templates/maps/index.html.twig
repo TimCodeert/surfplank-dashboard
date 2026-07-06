@@ -3,13 +3,13 @@
 {% block title %}SurfTimer Ranked Maps{% endblock %}
 
 {% block body %}
-<div class="container" style="margin-top: 50px; font-family: sans-serif;">
-    <h1>🗺️ Ranked Maps</h1>
+<div class="container">
+    <h1>Ranked Maps</h1>
     <p>Total ranked maps in pool: <strong>{{ maps|length }}</strong></p>
 
-    <table border="1" cellpadding="10" cellspacing="0" style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+    <table class="leaderboard-table">
         <thead>
-            <tr style="background-color: #f4f4f4; text-align: left;">
+            <tr>
                 <th>Map Name</th>
                 <th>Tier</th>
                 <th>Type</th>
@@ -24,7 +24,7 @@
                             <strong>{{ map.name }}</strong>
                         </a>
                     </td>
-                    <td><span style="background: #eee; padding: 2px 6px; border-radius: 4px;">Tier {{ map.tier }}</span></td>
+                    <td><span class="tag">Tier {{ map.tier ? map.tier : 1 }}</span></td>
                     <td>
                         {{ map.isLinear ? 'Linear' : map.stages ~ ' Stages' }}
                     </td>
@@ -32,7 +32,7 @@
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="8" style="text-align: center;">No ranked maps found in the database.</td>
+                    <td colspan="8" class="no-results">No ranked maps found in the database.</td>
                 </tr>
             {% endfor %}
         </tbody>
