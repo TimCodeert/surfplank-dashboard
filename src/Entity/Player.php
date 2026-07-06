@@ -43,7 +43,7 @@ class Player
 
     public function getName(): string
     {
-        return $this->name;
+        return preg_replace('/^\[[0-9:.-]+\]\s+/', '', $this->name);
     }
 
     public function getCountry(): string
