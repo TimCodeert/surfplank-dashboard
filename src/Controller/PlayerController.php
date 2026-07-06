@@ -9,6 +9,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class PlayerController extends AbstractController
 {
+    #[Route('/', name: 'app_home')] 
     #[Route('/players', name: 'app_players')]
     public function index(PlayerRepository $playerRepository): Response
     {
