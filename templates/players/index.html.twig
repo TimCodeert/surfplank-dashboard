@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}SurfTimer Leaderboard{% endblock %}
+
+{% block body %}
+<div class="container" style="margin-top: 50px; font-family: sans-serif;">
+    <h1>🏄 SurfTimer Players</h1>
+    <p>Total players: <strong>{{ players|length }}</strong></p>
+
+    <table border="1" cellpadding="10" cellspacing="0" style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+        <thead>
+            <tr style="background-color: #f4f4f4; text-align: left;">
+                <th>ID</th>
+                <th>Name</th>
+                <th>SteamID64</th>
+                <th>Country</th>
+                <th>Last Seen</th>
+                <th>Connections</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for player in players %}
+                <tr>
+                    <td>{{ player.id }}</td>
+                    <td><strong>{{ player.name }}</strong></td>
+                    <td><code>{{ player.steamId }}</code></td>
+                    <td>{{ player.country }}</td>
+                    <td>{{ player.lastSeen|date('Y-m-d H:i') }}</td>
+                    <td>{{ player.connections }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6" style="text-align: center;">No players found in the database.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
