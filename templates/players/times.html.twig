@@ -1,15 +1,17 @@
 {% extends 'base.html.twig' %}
+{% import "_macros.html.twig" as ui %}
 
 {% block title %}Times for {{ player.name }}{% endblock %}
 
 {% block body %}
 <div class="container" style="margin-top: 50px; font-family: sans-serif;">
-    <h1>{{ player.name }}</h1>
+    <h1>{{ player.name }} {{ ui.flag(player.country) }}</h1>
     <table class="leaderboard-table">
         <thead>
             <tr>
                 <th>Rank</th>
                 <th>Map</th>
+                <th>Stage</th>
                 <th>Type</th>
                 <th>Time</th>
             </tr>
@@ -18,14 +20,23 @@
             {% for row in times %}
                 {% set time = row[0] %}
                 {% set rank = row.rank %}
+                {% set completions = row.completions %}
+
                 <tr>
                     <td>
                         <span style="font-weight: bold; color: {{ rank == 1 ? '#d4af37' : (rank == 2 ? '#aaa' : (rank == 3 ? '#cd7f32' : '#333')) }}">
-                            #{{ rank }}
+                            #{{ rank }} / {{ completions }}
                         </span>
                     </td>
-                    <td><strong>{{ time.map.name }}</strong></td>
+                    <td>
+                        <a href="{{ path('app_map_times', { 'id': time.map.id }) }}" class="player-name-link">
+                            <strong>{{ time.map.name }}</strong>
+                        </a>
+                    </td>
                     <td>{{ time.isBonus ? 'Bonus ' ~ time.bonusNumber : 'Main Run' }}</td>
+                    <td>
+                        {{ time.map.isLinear ? 'Linear' : time.map.stages ~ ' Stages' }}
+                    </td>
                     <td><code>{{ time.formattedTime }}</code></td>
                 </tr>
             {% else %}

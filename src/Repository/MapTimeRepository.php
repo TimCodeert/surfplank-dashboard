@@ -47,19 +47,21 @@ class MapTimeRepository extends ServiceEntityRepository
         $rsm->addRootEntityFromClassMetadata(MapTime::class, 'mt');
         
         $rsm->addScalarResult('worldwide_rank', 'rank');
+        $rsm->addScalarResult('total_completions', 'completions');
 
         $sql = "
-            SELECT mt.*, ranked_times.worldwide_rank
+            SELECT mt.*, ranked_times.worldwide_rank, ranked_times.total_completions
             FROM MapTimes mt
             JOIN Maps m ON mt.map_id = m.id
             INNER JOIN (
                 SELECT id,
-                       RANK() OVER (PARTITION BY map_id, style, type, stage ORDER BY run_time ASC) as worldwide_rank
+                    COUNT(*) OVER (PARTITION BY map_id, style, type, stage) as total_completions,
+                    RANK() OVER (PARTITION BY map_id, style, type, stage ORDER BY run_time ASC) as worldwide_rank
                 FROM MapTimes
             ) ranked_times ON mt.id = ranked_times.id
             WHERE mt.player_id = :playerId
             AND m.ranked = :isRanked
-            ORDER BY mt.type ASC, mt.run_time ASC
+            ORDER BY ranked_times.worldwide_rank ASC
         ";
 
         $query = $entityManager->createNativeQuery($sql, $rsm);
