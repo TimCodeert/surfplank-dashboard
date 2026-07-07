@@ -1,4 +1,5 @@
 {% extends 'base.html.twig' %}
+{% import "_macros.html.twig" as ui %}
 
 {% block title %}Active players{% endblock %}
 
@@ -27,11 +28,7 @@
                     </td>
                     <td>
                         <div class="country-cell">
-                            <img 
-                                src="https://flagcdn.com/w20/{{ player.country|lower }}.png" 
-                                srcset="https://flagcdn.com/w40/{{ player.country|lower }}.png 2x"
-                                width="20" 
-                                alt="{{ player.country }}">
+                            {{ ui.flag(player.country) }}
                             <span>{{ player.country }}</span>
                         </div>
                     </td>
