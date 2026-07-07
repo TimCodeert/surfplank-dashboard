@@ -1,4 +1,5 @@
 {% extends 'base.html.twig' %}
+{% import "_macros.html.twig" as ui %}
 
 {% block title %}Leaderboard for {{ map.name }}{% endblock %}
 
@@ -19,7 +20,7 @@
             {% for time in times %}
                 <tr>
                     <td>#{{ loop.index }}</td>
-                    <td><strong>{{ time.player.name }}</strong></td>
+                    <td><strong>{{ time.player.name }} {{ ui.flag(time.player.country) }}</strong></td>
                     <td><code>{{ time.formattedTime }}</code></td>
                 </tr>
             {% else %}

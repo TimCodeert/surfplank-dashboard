@@ -1,0 +1,10 @@
+{% macro flag(country_code, showCode = false) %}
+        <img 
+            src="https://flagcdn.com/w20/{{ country_code|lower }}.png" 
+            srcset="https://flagcdn.com/w40/{{ country_code|lower }}.png 2x"
+            width="20" 
+            alt="{{ country_code }}">
+        {% if showCode %}
+            <span>{{ country_code }}</span>
+        {% endif %}
+{% endmacro %}
