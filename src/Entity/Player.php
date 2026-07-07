@@ -48,6 +48,9 @@ class Player
 
     public function getCountry(): string
     {
+        if ($this->country === 'LL') {
+            $this->country = 'BE';
+        }
         return $this->country;
     }
 
