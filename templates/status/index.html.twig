@@ -5,9 +5,10 @@
 
 {% block body %}
 <div class="container">
+    <img class="center" src="https://i.ibb.co/V0nK6bcN/banner.jpg">
     <div>
         <div>
-            <h1>{{ server.host }}</h1>
+            <h1 class="text-center">{{ server.host }}</h1>
             {% if server.status == 'online' %}
                 <span class="tag bg-success">Online</span>
             {% else %}
