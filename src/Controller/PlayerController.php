@@ -9,14 +9,13 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class PlayerController extends AbstractController
 {
-    #[Route('/', name: 'app_home')] 
     #[Route('/players', name: 'app_players')]
     public function index(PlayerRepository $playerRepository): Response
     {
-        $activePlayers = $playerRepository->getActivePlayers();
+        $players = $playerRepository->getPlayers();
 
         return $this->render('players/index.html.twig', [
-            'players' => $activePlayers,
+            'players' => $players,
         ]);
     }
 }

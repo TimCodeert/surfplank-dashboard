@@ -20,10 +20,23 @@ class PlayerRepository extends ServiceEntityRepository
      * Get players sorted by their last seen timestamp (most recent first)
      * @return Player[]
      */
-    public function getActivePlayers(): array
+    public function getPlayers(): array
     {
         return $this->createQueryBuilder('p')
             ->orderBy('p.lastSeen', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Get X last active players
+     * @return Player[]
+     */
+    public function findActivePlayers($limit): array
+    {
+        return $this->createQueryBuilder('p')
+            ->orderBy('p.lastSeen', 'DESC')
+            ->setMaxResults($limit)
             ->getQuery()
             ->getResult();
     }

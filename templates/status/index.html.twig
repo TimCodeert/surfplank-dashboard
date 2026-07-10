@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+{% import "_macros.html.twig" as ui %}
+
+{% block title %}CS2 Server Status{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div>
+        <div>
+            <h1>{{ server.host }}</h1>
+            {% if server.status == 'online' %}
+                <span class="tag bg-success">Online</span>
+            {% else %}
+                <span class="tag bg-danger">Offline</span>
+            {% endif %}
+        </div>
+        <div>
+            <p><strong>Current Map:</strong> {{ server.map }}</p>
+            <p><strong>Players Online:</strong> {{ server.player_count }} / {{ server.max_players }}</p>
+            <table class="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for player in server.players %}
+                    <tr>
+                        <td>
+                            <a href="{{ path('app_player_times', { 'id': player.id }) }}" class="player-name-link">
+                                <strong>{{ ui.flag(player.country) }} {{ player.name }}</strong>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
