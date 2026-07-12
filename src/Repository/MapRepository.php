@@ -28,4 +28,16 @@ class MapRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * @return Map
+     */
+    public function findMapByName($name): Map
+    {
+        return $this->createQueryBuilder('m')
+            ->andWhere('m.name = :name')
+            ->setParameter('name', $name)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }
