@@ -16,12 +16,15 @@
             {% endif %}
         </div>
         <div>
-            <p>
-                <strong>Current Map:</strong>
-                <a href="{{ path('app_map_times', { 'id': map.id }) }}" class="player-name-link">
-                    {{ map.name }}
-                </a>
-            </p>
+            {% if map %}
+                <p>
+                    <strong>Current Map:</strong>
+                    <a href="{{ path('app_map_times', { 'id': map.id }) }}" class="player-name-link">
+                        {{ map.name }}
+                    </a>
+                </p>
+            {% endif %}
+
             <p><strong>Players Online:</strong> {{ server.players|length }} / {{ server.max_players }}</p>
             <table class="leaderboard-table">
                 <thead>

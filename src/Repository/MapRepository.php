@@ -32,7 +32,7 @@ class MapRepository extends ServiceEntityRepository
     /**
      * @return Map
      */
-    public function findMapByName($name): Map
+    public function findMapByName($name): ?Map
     {
         return $this->createQueryBuilder('m')
             ->andWhere('m.name = :name')
