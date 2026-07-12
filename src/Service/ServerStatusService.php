@@ -7,6 +7,7 @@ use App\Mapper\ServerStatusMapper;
 use xPaw\SourceQuery\SourceQuery;
 use Psr\Log\LoggerInterface;
 use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
 
 class ServerStatusService
 {
@@ -14,19 +15,24 @@ class ServerStatusService
         private LoggerInterface $logger,
         private PlayerRepository $playerRepository,
         private ServerStatusMapper $statusMapper,
-        private CacheInterface $cache, // Toegevoegd
+        private CacheInterface $cache,
         private string $serverIp,
         private int $serverPort
     ) {}
 
     public function getServerStatus(): array
     {
-        return $this->cache->get('cs2_server_status', function () {
-            return $this->refreshCache();
+        $serverInfo = $this->cache->get('cs2_server_info', function (ItemInterface $item) {
+            $item->expiresAfter(30); 
+            
+            return $this->fetchLiveServerInfo();
         });
+
+        $players = $this->playerRepository->findOnlinePlayers();
+        return $this->statusMapper->map($serverInfo, $players);
     }
 
-    public function refreshCache(): array
+    private function fetchLiveServerInfo(): array
     {
         $serverInfo = [];
         $query = new SourceQuery();
@@ -40,15 +46,6 @@ class ServerStatusService
             $query->Disconnect();
         }
 
-        $playerCount = $serverInfo['Players'] ?? 0;
-        $players = $this->playerRepository->findActivePlayers($playerCount);
-        $statusData = $this->statusMapper->map($serverInfo, $players);
-
-        $this->cache->delete('cs2_server_status');
-        $this->cache->get('cs2_server_status', function () use ($statusData) {
-            return $statusData;
-        });
-
-        return $statusData;
+        return $serverInfo;
     }
 }

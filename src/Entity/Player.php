@@ -31,6 +31,9 @@ class Player
     #[ORM\Column(type: 'integer')]
     private int $connections;
 
+    #[ORM\Column(name: 'is_online', type: 'boolean')]
+    private ?bool $isOnline = false;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -67,6 +70,11 @@ class Player
     public function getConnections(): int
     {
         return $this->connections;
+    }
+
+    public function isOnline(): bool
+    {
+        return $this->isOnline;
     }
 
     public function getLastSeenAgo(): string

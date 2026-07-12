@@ -40,4 +40,17 @@ class PlayerRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * Get online players
+     * @return Player[]
+     */
+    public function findOnlinePlayers(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.isOnline = :onlineStatus')
+            ->setParameter('onlineStatus', true)
+            ->getQuery()
+            ->getResult();
+    }
 }
