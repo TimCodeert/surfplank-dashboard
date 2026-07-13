@@ -72,4 +72,64 @@ class MapTimeRepository extends ServiceEntityRepository
 
         return $query->getResult();
     }
+
+    /**
+     * Get the latest activities on the server
+     * * @param int $limit
+     * @return array
+     */
+    public function getLastActivity(int $limit = 10): array
+    {
+        $entityManager = $this->getEntityManager();
+
+        $rsm = new \Doctrine\ORM\Query\ResultSetMapping();
+        $rsm->addScalarResult('id', 'id');
+        $rsm->addScalarResult('run_time', 'runTime');
+        $rsm->addScalarResult('run_timestamp', 'runTimestamp');
+        $rsm->addScalarResult('player_id', 'playerId');
+        $rsm->addScalarResult('raw_player_name', 'rawPlayerName');
+        $rsm->addScalarResult('player_country', 'playerCountry');
+        $rsm->addScalarResult('map_name', 'mapName');
+        $rsm->addScalarResult('map_id', 'mapId');
+        $rsm->addScalarResult('worldwide_rank', 'rank');
+
+        $sql = "
+            SELECT 
+                mt.id,
+                mt.run_time,
+                mt.run_timestamp,
+                p.id AS player_id,
+                p.name AS raw_player_name,
+                p.country AS player_country,
+                m.name AS map_name,
+                m.id AS map_id,
+                ranked_times.worldwide_rank
+            FROM MapTimes mt
+            JOIN Player p ON mt.player_id = p.id
+            JOIN Maps m ON mt.map_id = m.id
+            INNER JOIN (
+                SELECT id,
+                    RANK() OVER (PARTITION BY map_id, style, type, stage ORDER BY run_time ASC) as worldwide_rank
+                FROM MapTimes
+            ) ranked_times ON mt.id = ranked_times.id
+            WHERE mt.type = 0 AND mt.stage = 0
+            ORDER BY mt.run_timestamp DESC
+            LIMIT :limit
+        ";
+
+        $query = $entityManager->createNativeQuery($sql, $rsm);
+        $query->setParameter('limit', $limit, \Doctrine\DBAL\ParameterType::INTEGER);
+
+        $results = $query->getResult();
+
+
+        foreach ($results as $key => $activity) {
+            $rawName = $activity['rawPlayerName'] ?? '';
+            $cleanName = preg_replace('/^\[[0-9:.-]+\]\s+/', '', $rawName);
+            $results[$key]['playerName'] = $cleanName;
+            unset($results[$key]['rawPlayerName']);
+        }
+
+        return $results;
+    }
 }

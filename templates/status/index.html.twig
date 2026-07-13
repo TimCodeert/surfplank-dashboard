@@ -4,28 +4,32 @@
 {% block title %}CS2 Server Status{% endblock %}
 
 {% block body %}
-<div class="container">
-    <img class="center" src="https://i.ibb.co/V0nK6bcN/banner.jpg">
-    <div>
-        <div>
+<div class="container dashboard-vertical">
+    
+    <div class="card status-card">
+        <div class="card-header">
             <h1 class="text-center">{{ server.host }}</h1>
-            {% if server.status == 'online' %}
-                <span class="tag bg-success">Online</span>
-            {% else %}
-                <span class="tag bg-danger">Offline</span>
-            {% endif %}
+            <div class="text-center">
+                {% if server.status == 'online' %}
+                    <span class="tag bg-success">Online</span>
+                {% else %}
+                    <span class="tag bg-danger">Offline</span>
+                {% endif %}
+            </div>
         </div>
-        <div>
+        
+        <div class="card-body">
             {% if map %}
                 <p>
                     <strong>Current Map:</strong>
                     <a href="{{ path('app_map_times', { 'id': map.id }) }}" class="player-name-link">
-                        {{ map.name }}
+                        <strong>{{ map.name }}</strong>
                     </a>
                 </p>
             {% endif %}
-
+            
             <p><strong>Players Online:</strong> {{ server.players|length }} / {{ server.max_players }}</p>
+            
             <table class="leaderboard-table">
                 <thead>
                     <tr>
@@ -41,10 +45,67 @@
                             </a>
                         </td>
                     </tr>
+                {% else %}
+                    <tr>
+                        <td class="text-muted text-center">No players online at the moment.</td>
+                    </tr>
                 {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
+
+    <div class="card activity-card">
+        <div class="card-header">
+            <h2>Last Activity</h2>
+        </div>
+        
+        <div class="card-body activity-stream">
+            {% for activity in activities %}
+                <div class="activity-block">
+                    <div class="activity-content">
+                        {% set country = activity.playerCountry == 'LL' ? 'BE' : activity.playerCountry %}
+                        {{ ui.flag(country) }}
+                        
+                        <a href="{{ path('app_player_times', { 'id': activity.playerId }) }}" class="player-name-link">
+                            <strong>{{ activity.playerName }}</strong>
+                        </a>
+                        
+                        {# Badge op basis van rank #}
+                        {% if activity.rank == 1 %}
+                            <span class="text-cs font-weight-bold">set a new Map WR</span>
+                        {% else %}
+                            <span class="text-info">made rank #{{ activity.rank }}</span>
+                        {% endif %}
+                        
+                        on 
+                        
+                        <a href="{{ path('app_map_times', { 'id': activity.mapId }) }}" class="map-link">
+                            <strong>{{ activity.mapName }}</strong>
+                        </a>
+                    </div>
+                    
+                    <div class="activity-time text-muted">
+                        {% set difference = date().timestamp - date(activity.runTimestamp).timestamp %}
+                        {% set hours = (difference / 3600)|round(0, 'floor') %}
+                        {% set minutes = (difference / 60)|round(0, 'floor') %}
+                        
+                        <small>
+                            {% if minutes < 60 %}
+                                {{ minutes }} min ago
+                            {% elseif hours < 24 %}
+                                {{ hours }} hours ago
+                            {% else %}
+                                {{ activity.runTimestamp|date('d-m-Y') }}
+                            {% endif %}
+                        </small>
+                    </div>
+                </div>
+            {% else %}
+                <p class="text-muted text-center">No recent map activity found.</p>
+            {% endfor %}
+        </div>
+    </div>
+
 </div>
 {% endblock %}
