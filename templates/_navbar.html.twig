@@ -12,6 +12,13 @@
     <ul class="navbar-nav">
         <li><a href="{{ path('app_players') }}">Players</a></li>
         <li><a href="{{ path('app_maps') }}">Maps</a></li>
+        {% set myPlayer = my_profile() %}
+    
+        {% if myPlayer %}
+            <a href="{{ path('app_player_times', { 'id': myPlayer.id }) }}" class="nav-link profile-link">
+                <strong>{{ myPlayer.name }}</strong>
+            </a>
+        {% endif %}
     </ul>
 
 

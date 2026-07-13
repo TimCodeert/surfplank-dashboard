@@ -34,6 +34,9 @@ class Player
     #[ORM\Column(name: 'is_online', type: 'boolean')]
     private ?bool $isOnline = false;
 
+    #[ORM\Column(type: 'string', length: 45)]
+    private string $ipAddress;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,6 +78,11 @@ class Player
     public function isOnline(): bool
     {
         return $this->isOnline;
+    }
+
+    public function getIpAddress(): string
+    {
+        return $this->ipAddress;
     }
 
     public function getLastSeenAgo(): string
