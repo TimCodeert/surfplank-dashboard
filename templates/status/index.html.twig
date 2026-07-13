@@ -83,6 +83,8 @@
                         <a href="{{ path('app_map_times', { 'id': activity.mapId }) }}" class="map-link">
                             <strong>{{ activity.mapName }}</strong>
                         </a>
+
+                        with a time of <strong>[{{ activity.runTime|format_ticks }}]</strong>
                     </div>
                     
                     <div class="activity-time text-muted">
