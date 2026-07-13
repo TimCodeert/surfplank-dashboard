@@ -75,11 +75,11 @@
                         {% if activity.rank == 1 %}
                             <span class="text-cs font-weight-bold">set a new Map WR</span>
                         {% else %}
-                            <span class="text-info">made rank #{{ activity.rank }}</span>
+                            <span class="text-primary">made rank #{{ activity.rank }}</span>
                         {% endif %}
                         
-                        on 
-                        
+                        on              
+
                         <a href="{{ path('app_map_times', { 'id': activity.mapId }) }}" class="map-link">
                             <strong>{{ activity.mapName }}</strong>
                         </a>

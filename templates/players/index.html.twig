@@ -4,17 +4,42 @@
 {% block title %}Active players{% endblock %}
 
 {% block body %}
-<div class="container">
-    <h1>Active players</h1>
-    <p>Total players: <strong>{{ players|length }}</strong></p>
+<div class="container players-dashboard">
 
+    <div class="search-container">
+        <form method="get" action="{{ path('app_players') }}" class="search-form">
+            <input type="hidden" name="sort" value="{{ currentSort }}">
+            <input type="hidden" name="direction" value="{{ currentDirection }}">
+            
+            <input type="text" name="search" value="{{ currentSearch }}" placeholder="Search player by name..." class="form-control">
+            <button type="submit" class="btn btn-primary">Search</button>
+            
+            {% if currentSearch %}
+                <a href="{{ path('app_players', { sort: currentSort, direction: currentDirection }) }}" class="btn btn-secondary">Clear</a>
+            {% endif %}
+        </form>
+    </div>
+    <p>Total players found: <strong>{{ totalPlayers }}</strong></p>
+
+
+    {% macro sortLink(column, label, currentSort, currentDirection, currentSearch) %}
+        {% set nextDirection = (currentSort == column and currentDirection == 'asc') ? 'desc' : 'asc' %}
+        {% set icon = currentSort == column ? (currentDirection == 'asc' ? ' ▲' : ' ▼') : '' %}
+        <a href="{{ path('app_players', { page: 1, sort: column, direction: nextDirection, search: currentSearch }) }}">
+            <strong>{{ label }}{{ icon }}</strong>
+        </a>
+    {% endmacro %}
+    {% import _self as sortHelper %}
+
+    {# TABEL #}
     <table class="leaderboard-table">
         <thead>
             <tr>
-                <th>Name</th>
-                <th>Country</th>
-                <th>Last Seen</th>
-                <th>Visits</th>
+                <th>{{ sortHelper.sortLink('name', 'Name', currentSort, currentDirection, currentSearch) }}</th>
+                <th>{{ sortHelper.sortLink('country', 'Country', currentSort, currentDirection, currentSearch) }}</th>
+                <th>{{ sortHelper.sortLink('lastSeen', 'Last Seen', currentSort, currentDirection, currentSearch) }}</th>
+                <th>{{ sortHelper.sortLink('connections', 'Visits', currentSort, currentDirection, currentSearch) }}</th>
+                <th>{{ sortHelper.sortLink('completions', 'Completions', currentSort, currentDirection, currentSearch) }}</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -28,18 +53,18 @@
                     </td>
                     <td>
                         <div class="country-cell">
-                            {{ ui.flag(player.country) }}
-                            <span>{{ player.country }}</span>
+                            {% set country = player.country == 'LL' ? 'BE' : player.country %}
+                            {{ ui.flag(country) }}
+                            <span>{{ country }}</span>
                         </div>
                     </td>
                     <td>{{ player.lastSeenAgo }}</td>
                     <td>{{ player.connections }}</td>
                     <td>
-                        <a href="https://steamcommunity.com/profiles/{{ player.steamId }}/" 
-                           target="_blank" 
-                           rel="noopener noreferrer" 
-                           class="steam-link">
-                            
+                        <span class="badge bg-secondary">{{ player.completionsCount }} runs</span>
+                    </td>
+                    <td>
+                        <a href="https://steamcommunity.com/profiles/{{ player.steamId }}/" target="_blank" rel="noopener noreferrer" class="steam-link">
                             <img src="https://cdn.iconscout.com/icon/free/png-256/free-steam-logo-icon-svg-download-png-1933796.png" alt="Steam Logo">
                             <span>View Steam Profile</span>
                         </a>
@@ -47,10 +72,28 @@
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="5" class="no-results">No players found in the database.</td>
+                    <td colspan="6" class="no-results">No players found matching your criteria.</td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
+
+    {% if maxPages > 1 %}
+        <div class="pagination-container">
+            {% if currentPage > 1 %}
+                <a href="{{ path('app_players', { page: currentPage - 1, sort: currentSort, direction: currentDirection, search: currentSearch }) }}" class="page-link">« Prev</a>
+            {% endif %}
+
+            {% for i in 1..maxPages %}
+                <a href="{{ path('app_players', { page: i, sort: currentSort, direction: currentDirection, search: currentSearch }) }}" class="page-link {% if currentPage == i %}active{% endif %}">
+                    {{ i }}
+                </a>
+            {% endfor %}
+
+            {% if currentPage < maxPages %}
+                <a href="{{ path('app_players', { page: currentPage + 1, sort: currentSort, direction: currentDirection, search: currentSearch }) }}" class="page-link">Next »</a>
+            {% endif %}
+        </div>
+    {% endif %}
 </div>
 {% endblock %}
