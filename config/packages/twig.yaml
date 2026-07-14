@@ -1,5 +1,7 @@
 twig:
     file_name_pattern: '*.twig'
+    globals:
+        ga_id: '%app.ga_measurement_id%'
 
 when@test:
     twig:
