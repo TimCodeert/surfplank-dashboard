@@ -21,7 +21,7 @@
                 </p>
             {% endif %}
             
-            <p><strong>Players:</strong> {{ server.players|length }} / {{ server.max_players }}</p>
+            <p><strong>Players:</strong> {{ players|length }} / 64</p>
             
             <table class="leaderboard-table">
                 <thead>
@@ -30,7 +30,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                {% for player in server.players %}
+                {% for player in players %}
                     <tr>
                         <td>
                             <a href="{{ path('app_player_times', { 'id': player.id }) }}" class="player-name-link">

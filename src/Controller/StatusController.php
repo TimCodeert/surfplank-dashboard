@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Service\ServerStatusService;
 use App\Repository\MapRepository;
+use App\Repository\PlayerRepository;
 use App\Repository\MapTimeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,14 +13,18 @@ use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 class StatusController extends AbstractController
 {
     #[Route('/', name: 'app_home', options: ['sitemap' => ['priority' => 1, 'changefreq' => UrlConcrete::CHANGEFREQ_ALWAYS]])] 
-    public function index(ServerStatusService $serverStatusService, MapRepository $mapRepository, MapTimeRepository $mapTimeRepository): Response
+    public function index(
+        MapRepository $mapRepository,
+        PlayerRepository $playerRepository,
+        MapTimeRepository $mapTimeRepository
+        ): Response
     {
-        $serverStatus = $serverStatusService->getServerStatus();
-        $map = $mapRepository->findMapByName($serverStatus['map']);
+        $players = $playerRepository->findOnlinePlayers();
+        $map = $mapRepository->findActiveMap();
         $activities = $mapTimeRepository->getLastActivity();
 
         return $this->render('status/index.html.twig', [
-            'server' => $serverStatus,
+            'players' => $players,
             'map' => $map,
             'activities' => $activities,
         ]);

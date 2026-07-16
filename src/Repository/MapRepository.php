@@ -40,4 +40,16 @@ class MapRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    /**
+     * @return Map
+     */
+    public function findActiveMap(): Map
+    {
+        return $this->createQueryBuilder('m')
+            ->orderBy('m.lastPlayed', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }
