@@ -8,10 +8,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 
 class PlayerController extends AbstractController
 {
-    #[Route('/players', name: 'app_players')]
+    #[Route('/players', name: 'app_players', options: ['sitemap' => ['priority' => 0.7, 'changefreq' => UrlConcrete::CHANGEFREQ_DAILY]])]
     public function index(
         PlayerRepository $playerRepository, 
         PlayerPaginationMapper $paginationMapper,

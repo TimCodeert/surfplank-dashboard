@@ -8,11 +8,11 @@ use App\Repository\MapTimeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 
 class StatusController extends AbstractController
 {
-    #[Route('/', name: 'app_home')] 
-    #[Route('/status', name: 'app_status')]
+    #[Route('/', name: 'app_home', options: ['sitemap' => ['priority' => 1, 'changefreq' => UrlConcrete::CHANGEFREQ_ALWAYS]])] 
     public function index(ServerStatusService $serverStatusService, MapRepository $mapRepository, MapTimeRepository $mapTimeRepository): Response
     {
         $serverStatus = $serverStatusService->getServerStatus();
