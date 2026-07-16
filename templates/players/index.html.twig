@@ -47,7 +47,7 @@
             {% for player in players %}
                 <tr>
                     <td>
-                        <a href="{{ path('app_player_times', { 'id': player.id }) }}" class="player-name-link">
+                        <a href="{{ path('app_player_times', { 'steamId': player.steamId }) }}" class="player-name-link">
                             <strong>{{ player.name }}</strong>
                         </a>
                     </td>
