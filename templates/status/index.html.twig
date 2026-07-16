@@ -8,27 +8,20 @@
     
     <div class="card status-card">
         <div class="card-header">
-            <h1 class="text-center">{{ server.host }}</h1>
-            <div class="text-center">
-                {% if server.status == 'online' %}
-                    <span class="tag bg-success">Online</span>
-                {% else %}
-                    <span class="tag bg-danger">Offline</span>
-                {% endif %}
-            </div>
+            <h2>Currently playing</h2>
         </div>
         
         <div class="card-body">
             {% if map %}
                 <p>
-                    <strong>Current Map:</strong>
+                    <strong>Map:</strong>
                     <a href="{{ path('app_map_times', { 'id': map.id }) }}" class="player-name-link">
                         <strong>{{ map.name }}</strong>
                     </a>
                 </p>
             {% endif %}
             
-            <p><strong>Players Online:</strong> {{ server.players|length }} / {{ server.max_players }}</p>
+            <p><strong>Players:</strong> {{ server.players|length }} / {{ server.max_players }}</p>
             
             <table class="leaderboard-table">
                 <thead>
