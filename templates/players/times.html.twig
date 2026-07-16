@@ -17,10 +17,9 @@
             </tr>
         </thead>
         <tbody>
-            {% for row in times %}
-                {% set time = row[0] %}
-                {% set rank = row.rank %}
-                {% set completions = row.completions %}
+            {% for time in times %}
+                {% set rank = time.rankedData.worldwideRank %}
+                {% set completions = time.rankedData.totalCompletions %}
 
                 <tr>
                     <td>

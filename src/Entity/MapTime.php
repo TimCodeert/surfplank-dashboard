@@ -30,6 +30,12 @@ class MapTime
     #[ORM\Column(name: 'run_time', type: 'integer')]
     private int $runTime;
 
+    #[ORM\Column(name: 'run_timestamp', type: 'datetime_immutable')]
+    private \DateTimeImmutable $runTimestamp;
+
+    #[ORM\OneToOne(mappedBy: 'mapTime', targetEntity: RankedMapTime::class, cascade: ['persist', 'remove'])]
+    private ?RankedMapTime $rankedData = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -68,6 +74,16 @@ class MapTime
     public function getBonusNumber(): ?int
     {
         return $this->isBonus() ? $this->stage : null;
+    }
+
+    public function getRunTimestamp(): \DateTimeImmutable
+    {
+        return $this->runTimestamp;
+    }
+
+    public function getRankedData(): ?RankedMapTime
+    {
+        return $this->rankedData;
     }
 
     /**

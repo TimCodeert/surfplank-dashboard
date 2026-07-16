@@ -57,24 +57,23 @@
             {% for activity in activities %}
                 <div class="activity-block">
                     <div class="activity-content">
-                        {% set country = activity.playerCountry == 'LL' ? 'BE' : activity.playerCountry %}
+                        {% set country = activity.player.country == 'LL' ? 'BE' : activity.player.country %}
                         {{ ui.flag(country) }}
                         
-                        <a href="{{ path('app_player_times', { 'steamId': activity.steamId }) }}" class="player-name-link">
-                            <strong>{{ activity.playerName }}</strong>
+                        <a href="{{ path('app_player_times', { 'steamId': activity.player.steamId }) }}" class="player-name-link">
+                            <strong>{{ activity.player.name }}</strong>
                         </a>
                         
-                        {# Badge op basis van rank #}
-                        {% if activity.rank == 1 %}
+                        {% if activity.rankedData.worldwideRank == 1 %}
                             <span class="text-cs font-weight-bold">set a new Map WR</span>
                         {% else %}
-                            <span class="text-primary">made rank #{{ activity.rank }}</span>
+                            <span class="text-primary">made rank #{{ activity.rankedData.worldwideRank }}</span>
                         {% endif %}
                         
                         on              
 
-                        <a href="{{ path('app_map_times', { 'name': activity.mapName }) }}" class="map-link">
-                            <strong>{{ activity.mapName }}</strong>
+                        <a href="{{ path('app_map_times', { 'name': activity.map.name }) }}" class="map-link">
+                            <strong>{{ activity.map.name }}</strong>
                         </a>
 
                         with a time of <strong>[{{ activity.runTime|format_ticks }}]</strong>

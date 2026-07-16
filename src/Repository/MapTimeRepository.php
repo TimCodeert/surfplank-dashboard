@@ -41,97 +41,38 @@ class MapTimeRepository extends ServiceEntityRepository
      */
     public function findTimesForPlayer(int $playerId): array
     {
-        $entityManager = $this->getEntityManager();
-
-        $rsm = new ResultSetMappingBuilder($entityManager);
-        $rsm->addRootEntityFromClassMetadata(MapTime::class, 'mt');
-        
-        $rsm->addScalarResult('worldwide_rank', 'rank');
-        $rsm->addScalarResult('total_completions', 'completions');
-
-        $sql = "
-            SELECT mt.*, ranked_times.worldwide_rank, ranked_times.total_completions
-            FROM MapTimes mt
-            JOIN Maps m ON mt.map_id = m.id
-            INNER JOIN (
-                SELECT id,
-                    COUNT(*) OVER (PARTITION BY map_id, style, type, stage) as total_completions,
-                    RANK() OVER (PARTITION BY map_id, style, type, stage ORDER BY run_time ASC) as worldwide_rank
-                FROM MapTimes
-            ) ranked_times ON mt.id = ranked_times.id
-            WHERE mt.player_id = :playerId
-            AND m.ranked = :isRanked
-            ORDER BY ranked_times.worldwide_rank ASC
-        ";
-
-        $query = $entityManager->createNativeQuery($sql, $rsm);
-
-        $query->setParameter('playerId', $playerId);
-        $query->setParameter('isRanked', true);
-        
-
-        return $query->getResult();
+        return $this->createQueryBuilder('mt')
+            ->select('mt', 'rd')
+            ->join('mt.map', 'm')
+            ->join('mt.rankedData', 'rd')
+            ->where('mt.player = :playerId')
+            ->andWhere('m.ranked = :isRanked')
+            ->setParameter('playerId', $playerId)
+            ->setParameter('isRanked', true)
+            ->orderBy('rd.worldwideRank', 'ASC')
+            ->getQuery()
+            ->getResult();  
     }
 
     /**
      * Get the latest activities on the server
-     * * @param int $limit
-     * @return array
+     * @param int $limit
+     * @return MapTime[]
      */
     public function getLastActivity(int $limit = 10): array
     {
-        $entityManager = $this->getEntityManager();
-
-        $rsm = new \Doctrine\ORM\Query\ResultSetMapping();
-        $rsm->addScalarResult('id', 'id');
-        $rsm->addScalarResult('run_time', 'runTime');
-        $rsm->addScalarResult('run_timestamp', 'runTimestamp');
-        $rsm->addScalarResult('player_id', 'playerId');
-        $rsm->addScalarResult('steam_id', 'steamId');
-        $rsm->addScalarResult('raw_player_name', 'rawPlayerName');
-        $rsm->addScalarResult('player_country', 'playerCountry');
-        $rsm->addScalarResult('map_name', 'mapName');
-        $rsm->addScalarResult('map_id', 'mapId');
-        $rsm->addScalarResult('worldwide_rank', 'rank');
-
-        $sql = "
-            SELECT 
-                mt.id,
-                mt.run_time,
-                mt.run_timestamp,
-                p.id AS player_id,
-                p.steam_id as steam_id,
-                p.name AS raw_player_name,
-                p.country AS player_country,
-                m.name AS map_name,
-                m.id AS map_id,
-                ranked_times.worldwide_rank
-            FROM MapTimes mt
-            JOIN Player p ON mt.player_id = p.id
-            JOIN Maps m ON mt.map_id = m.id
-            INNER JOIN (
-                SELECT id,
-                    RANK() OVER (PARTITION BY map_id, style, type, stage ORDER BY run_time ASC) as worldwide_rank
-                FROM MapTimes
-            ) ranked_times ON mt.id = ranked_times.id
-            WHERE mt.type = 0 AND mt.stage = 0
-            ORDER BY mt.run_timestamp DESC
-            LIMIT :limit
-        ";
-
-        $query = $entityManager->createNativeQuery($sql, $rsm);
-        $query->setParameter('limit', $limit, \Doctrine\DBAL\ParameterType::INTEGER);
-
-        $results = $query->getResult();
-
-
-        foreach ($results as $key => $activity) {
-            $rawName = $activity['rawPlayerName'] ?? '';
-            $cleanName = preg_replace('/^\[[0-9:.-]+\]\s+/', '', $rawName);
-            $results[$key]['playerName'] = $cleanName;
-            unset($results[$key]['rawPlayerName']);
-        }
-
-        return $results;
+        return $this->createQueryBuilder('mt')
+            ->select('mt', 'p', 'm', 'rd')
+            ->join('mt.player', 'p')
+            ->join('mt.map', 'm')
+            ->join('mt.rankedData', 'rd')
+            ->where('mt.type = :type')
+            ->andWhere('mt.stage = :stage')
+            ->setParameter('type', 0)
+            ->setParameter('stage', 0)
+            ->orderBy('mt.runTimestamp', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
     }
 }
