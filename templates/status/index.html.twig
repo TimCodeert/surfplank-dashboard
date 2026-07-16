@@ -15,7 +15,7 @@
             {% if map %}
                 <p>
                     <strong>Map:</strong>
-                    <a href="{{ path('app_map_times', { 'id': map.id }) }}" class="player-name-link">
+                    <a href="{{ path('app_map_times', { 'name': map.name }) }}" class="player-name-link">
                         <strong>{{ map.name }}</strong>
                     </a>
                 </p>
@@ -73,7 +73,7 @@
                         
                         on              
 
-                        <a href="{{ path('app_map_times', { 'id': activity.mapId }) }}" class="map-link">
+                        <a href="{{ path('app_map_times', { 'name': activity.mapName }) }}" class="map-link">
                             <strong>{{ activity.mapName }}</strong>
                         </a>
 

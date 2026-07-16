@@ -11,15 +11,15 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class MapTimeController extends AbstractController
 {
-    #[Route('/map/{id}/times', name: 'app_map_times')]
-    public function mapLeaderboard(int $id, MapTimeRepository $timeRepository, MapRepository $mapRepository): Response
+    #[Route('/map/{name}/times', name: 'app_map_times')]
+    public function mapLeaderboard(string $name, MapTimeRepository $timeRepository, MapRepository $mapRepository): Response
     {
-        $map = $mapRepository->find($id);
+        $map = $mapRepository->findMapByName($name);
         if (!$map) {
             throw $this->createNotFoundException('Map not found');
         }
 
-        $times = $timeRepository->findLeaderboardForMap($id);
+        $times = $timeRepository->findLeaderboardForMap($map->getId());
 
         return $this->render('maps/times.html.twig', [
             'map' => $map,
