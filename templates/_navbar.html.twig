@@ -15,7 +15,7 @@
         {% set myPlayer = my_profile() %}
     
         {% if myPlayer %}
-            <a href="{{ path('app_player_times', { 'id': myPlayer.id }) }}" class="nav-link profile-link">
+            <a href="{{ path('app_player_times', { 'steamId': myPlayer.steamId }) }}" class="nav-link profile-link">
                 <strong>{{ myPlayer.name }}</strong>
             </a>
         {% endif %}

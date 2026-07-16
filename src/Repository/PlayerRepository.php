@@ -18,15 +18,29 @@ class PlayerRepository extends ServiceEntityRepository
     }
 
     /**
-     * Get players sorted by their last seen timestamp (most recent first)
+     * Get online players
      * @return Player[]
      */
-    public function getPlayers(): array
+    public function findOnlinePlayers(): array
     {
         return $this->createQueryBuilder('p')
-            ->orderBy('p.lastSeen', 'DESC')
+            ->andWhere('p.isOnline = :onlineStatus')
+            ->setParameter('onlineStatus', true)
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * Find player by steamId
+     * @return Player
+     */
+    public function findPlayerBySteamId($steamId): ?Player
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.steamId = :steamId')
+            ->setParameter('steamId', $steamId)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 
     public function findPaginatedPlayers(int $page, int $limit, string $sort, string $direction, ?string $search): Paginator
@@ -35,7 +49,7 @@ class PlayerRepository extends ServiceEntityRepository
 
         // Calculate completions
         $qb->select('p AS player')
-        ->addSelect('(
+            ->addSelect('(
             SELECT COUNT(mt.id) 
             FROM App\Entity\MapTime mt 
             JOIN mt.map m 
@@ -62,29 +76,4 @@ class PlayerRepository extends ServiceEntityRepository
         return new Paginator($qb->getQuery(), true);
     }
 
-    /**
-     * Get X last active players
-     * @return Player[]
-     */
-    public function findActivePlayers($limit): array
-    {
-        return $this->createQueryBuilder('p')
-            ->orderBy('p.lastSeen', 'DESC')
-            ->setMaxResults($limit)
-            ->getQuery()
-            ->getResult();
-    }
-
-    /**
-     * Get online players
-     * @return Player[]
-     */
-    public function findOnlinePlayers(): array
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.isOnline = :onlineStatus')
-            ->setParameter('onlineStatus', true)
-            ->getQuery()
-            ->getResult();
-    }
 }

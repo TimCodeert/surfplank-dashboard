@@ -21,7 +21,7 @@
                 <tr>
                     <td>#{{ loop.index }}</td>
                     <td>
-                        <a href="{{ path('app_player_times', { 'id': time.player.id }) }}" class="player-name-link">
+                        <a href="{{ path('app_player_times', { 'steamId': time.player.steamId }) }}" class="player-name-link">
                             <strong>{{ ui.flag(time.player.country) }} {{ time.player.name }}</strong>
                         </a>
                     </td>

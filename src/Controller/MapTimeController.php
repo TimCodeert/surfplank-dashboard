@@ -27,16 +27,16 @@ class MapTimeController extends AbstractController
         ]);
     }
 
-    #[Route('/player/{id}/times', name: 'app_player_times')]
-    public function playerTimes(int $id, MapTimeRepository $timeRepository, PlayerRepository $playerRepository): Response
+    #[Route('/player/{steamId}/times', name: 'app_player_times')]
+    public function playerTimes(int $steamId, MapTimeRepository $timeRepository, PlayerRepository $playerRepository): Response
     {
-        $player = $playerRepository->find($id);
+        $player = $playerRepository->findPlayerBySteamId($steamId);
         
         if (!$player) {
             throw $this->createNotFoundException('Player not found');
         }
 
-        $times = $timeRepository->findTimesForPlayer($id);
+        $times = $timeRepository->findTimesForPlayer($player->getId());
 
         return $this->render('players/times.html.twig', [
             'player' => $player,

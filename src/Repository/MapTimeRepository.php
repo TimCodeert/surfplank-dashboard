@@ -87,6 +87,7 @@ class MapTimeRepository extends ServiceEntityRepository
         $rsm->addScalarResult('run_time', 'runTime');
         $rsm->addScalarResult('run_timestamp', 'runTimestamp');
         $rsm->addScalarResult('player_id', 'playerId');
+        $rsm->addScalarResult('steam_id', 'steamId');
         $rsm->addScalarResult('raw_player_name', 'rawPlayerName');
         $rsm->addScalarResult('player_country', 'playerCountry');
         $rsm->addScalarResult('map_name', 'mapName');
@@ -99,6 +100,7 @@ class MapTimeRepository extends ServiceEntityRepository
                 mt.run_time,
                 mt.run_timestamp,
                 p.id AS player_id,
+                p.steam_id as steam_id,
                 p.name AS raw_player_name,
                 p.country AS player_country,
                 m.name AS map_name,
