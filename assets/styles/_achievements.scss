@@ -1,18 +1,23 @@
 .achievements-grid {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 15px;
-    flex-wrap: wrap;
 
     .achievement-card {
         border: 1px solid #ccc;
         padding: 15px;
         border-radius: 8px;
         transition: opacity 0.2s ease-in-out, background-color 0.2s ease-in-out;
+        
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start; 
+        text-align: left;
 
         &.unlocked {
             opacity: 1.0;
             background-color: #e6ffe6;
-            border-color: #b3ebb3; // Iets zachtere groene rand voor de looks
+            border-color: #b3ebb3;
         }
 
         &.locked {
@@ -27,6 +32,7 @@
 
         h3 {
             margin: 0 0 5px 0;
+            width: 100%;
         }
 
         p {
