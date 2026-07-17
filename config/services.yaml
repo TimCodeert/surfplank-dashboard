@@ -20,5 +20,13 @@ services:
     App\:
         resource: '../src/'
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+    App\Service\Achievement\Achievements\:
+        resource: '../src/Service/Achievement/Achievements/'
+
+    _instanceof:
+        App\Service\Achievement\AchievementInterface:
+            tags: ['app.achievement']
+
+    App\Service\Achievement\AchievementManager:
+        arguments:
+                    $achievements: !tagged_iterator app.achievement

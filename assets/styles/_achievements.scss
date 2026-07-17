@@ -1,0 +1,38 @@
+.achievements-grid {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+
+    .achievement-card {
+        border: 1px solid #ccc;
+        padding: 15px;
+        border-radius: 8px;
+        transition: opacity 0.2s ease-in-out, background-color 0.2s ease-in-out;
+
+        &.unlocked {
+            opacity: 1.0;
+            background-color: #e6ffe6;
+            border-color: #b3ebb3; // Iets zachtere groene rand voor de looks
+        }
+
+        &.locked {
+            opacity: 0.5;
+            background-color: #f9f9f9;
+        }
+
+        .achievement-icon {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        h3 {
+            margin: 0 0 5px 0;
+        }
+
+        p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #555;
+        }
+    }
+}

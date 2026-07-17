@@ -45,5 +45,21 @@
             {% endfor %}
         </tbody>
     </table>
+
+    <h2>Achievements</h2>
+    <div class="achievements-grid">
+        {% for achievement in achievements %}
+            {% set isUnlocked = achievement.key in unlockedKeys %}
+            
+            <div class="achievement-card {{ isUnlocked ? 'unlocked' : 'locked' }}">
+                <div class="achievement-icon">
+                    {{ isUnlocked ? '🏆' : '🔒' }}
+                </div>
+                
+                <h3>{{ achievement.name }}</h3>
+                <p>{{ achievement.description }}</p>
+            </div>
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}
