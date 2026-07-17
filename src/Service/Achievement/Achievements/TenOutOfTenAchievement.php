@@ -12,7 +12,7 @@ class TenOutOfTenAchievement implements AchievementInterface
     ) {}
 
     public function getKey(): string { return 'ten_out_of_ten'; }
-    public function getName(): string { return 'Ten out of Ten!'; }
+    public function getName(): string { return 'Ten out of Ten'; }
     public function getDescription(): string { return 'Complete at least 10 maps'; }
 
     public function isQualified(Player $player): bool
