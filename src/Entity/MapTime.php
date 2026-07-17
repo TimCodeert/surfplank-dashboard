@@ -33,6 +33,18 @@ class MapTime
     #[ORM\Column(name: 'run_timestamp', type: 'datetime_immutable')]
     private \DateTimeImmutable $runTimestamp;
 
+    #[ORM\Column(name: 'start_vel_x', type: 'float')]
+    private float $startVelX;
+
+    #[ORM\Column(name: 'start_vel_y', type: 'float')]
+    private float $startVelY;
+
+    #[ORM\Column(name: 'end_vel_x', type: 'float')]
+    private float $endVelX;
+
+    #[ORM\Column(name: 'end_vel_y', type: 'float')]
+    private float $endVelY;
+
     #[ORM\OneToOne(mappedBy: 'mapTime', targetEntity: RankedMapTime::class, cascade: ['persist', 'remove'])]
     private ?RankedMapTime $rankedData = null;
 
@@ -84,6 +96,22 @@ class MapTime
     public function getRankedData(): ?RankedMapTime
     {
         return $this->rankedData;
+    }
+
+    public function getStartSpeed(): float
+    {
+        return round(sqrt(
+                pow($this->startVelX, 2) + 
+                pow($this->startVelY, 2)
+            ));
+    }
+
+    public function getEndSpeed(): float
+    {
+        return round(sqrt(
+                pow($this->endVelX, 2) + 
+                pow($this->endVelY, 2)
+            ));
     }
 
     /**

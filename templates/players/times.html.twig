@@ -14,6 +14,8 @@
                 <th>Stage</th>
                 <th>Type</th>
                 <th>Time</th>
+                <th>Start Speed</th>
+                <th>End Speed</th>
             </tr>
         </thead>
         <tbody>
@@ -37,6 +39,8 @@
                         {{ time.map.isLinear ? 'Linear' : time.map.stages ~ ' Stages' }}
                     </td>
                     <td><code>{{ time.formattedTime }}</code></td>
+                    <td>{{ time.startSpeed }}</td>
+                    <td>{{ time.endSpeed }}</td>
                 </tr>
             {% else %}
                 <tr>
