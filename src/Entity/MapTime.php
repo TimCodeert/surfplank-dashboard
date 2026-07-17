@@ -48,6 +48,10 @@ class MapTime
     #[ORM\OneToOne(mappedBy: 'mapTime', targetEntity: RankedMapTime::class, cascade: ['persist', 'remove'])]
     private ?RankedMapTime $rankedData = null;
 
+    #[ORM\OneToMany(targetEntity: Checkpoint::class, mappedBy: 'mapTime')]
+    #[ORM\OrderBy(['checkpointNumber' => 'ASC'])]
+    private iterable $checkpoints;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -96,6 +100,11 @@ class MapTime
     public function getRankedData(): ?RankedMapTime
     {
         return $this->rankedData;
+    }
+
+    public function getCheckpoints(): iterable
+    {
+        return $this->checkpoints;
     }
 
     public function getStartSpeed(): float
