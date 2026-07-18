@@ -56,8 +56,12 @@
             {% set isUnlocked = achievement.key in unlockedKeys %}
             
             <div class="achievement-card {{ isUnlocked ? 'unlocked' : 'locked' }}">
-                <div class="achievement-icon">
-                    {{ isUnlocked ? '🏆' : '🔒' }}
+                <div class="achievement-badge-container">
+                <img src="{{ asset('images/achievements/' ~ achievement.key ~ '.png') }}" alt="{{ achievement.name }}" class="achievement-img">
+                    
+                    {% if not isUnlocked %}
+                        <div class="lock-overlay">🔒</div>
+                    {% endif %}
                 </div>
                 
                 <h3>{{ achievement.name }}</h3>
