@@ -53,6 +53,44 @@ class MapTimeRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();  
     }
+    /**
+     * Get time for player
+     * @return ?MapTime
+     */
+    public function findTimeForPlayer(int $playerId, string $mapName): ?MapTime
+    {
+        return $this->createQueryBuilder('mt')
+            ->join('mt.map', 'm')
+            ->where('mt.player = :playerId')
+            ->andWhere('m.name = :mapName')
+            ->andWhere('mt.type = :type')
+            ->setParameter('playerId', $playerId)
+            ->setParameter('mapName', $mapName)
+            ->setParameter('type', 0)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    /**
+     * Get WR time for map
+     * @return ?MapTime
+     */
+    public function findWorldRecord(int $mapId, int $type, int $stage = 0): ?MapTime
+    {
+        return $this->createQueryBuilder('mt')
+            ->join('mt.rankedData', 'rd')
+            ->where('mt.map = :mapId')
+            ->andWhere('mt.type = :type')
+            ->andWhere('mt.stage = :stage')
+            ->andWhere('rd.worldwideRank = 1')
+            ->setParameter('mapId', $mapId)
+            ->setParameter('type', $type)
+            ->setParameter('stage', $stage)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 
     /**
      * Get the latest activities on the server

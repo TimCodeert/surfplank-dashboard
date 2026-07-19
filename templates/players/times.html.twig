@@ -16,6 +16,7 @@
                 <th>Time</th>
                 <th>Start Speed</th>
                 <th>End Speed</th>
+                <th>Checkpoints</th>
             </tr>
         </thead>
         <tbody>
@@ -40,6 +41,11 @@
                     <td><code>{{ time.formattedTime }}</code></td>
                     <td>{{ time.startSpeed }}</td>
                     <td>{{ time.endSpeed }}</td>
+                    <td>
+                        <a href="{{ path('app_player_map_checkpoints', { 'name': time.map.name, 'steamId': player.steamId }) }}" class="player-name-link">
+                            <strong>See checkpoints</strong>
+                        </a>
+                    </td>
                 </tr>
             {% else %}
                 <tr>

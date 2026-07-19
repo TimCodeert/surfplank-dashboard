@@ -89,4 +89,19 @@ class Checkpoint
     {
         return round(sqrt(pow((float) $this->endVelX, 2) + pow((float) $this->endVelY, 2)), 3);
     }
+
+    public function getFormattedTime(): string
+    {
+        $tickRate = 64;
+        
+        $totalSeconds = floor($this->runTime / $tickRate);
+        $remainingTicks = $this->runTime % $tickRate;
+
+        $minutes = floor($totalSeconds / 60);
+        $seconds = $totalSeconds % 60;
+
+        $milliseconds = floor(($remainingTicks / $tickRate) * 100);
+
+        return sprintf('%02d:%02d.%02d', $minutes, $seconds, $milliseconds);
+    }
 }

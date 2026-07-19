@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+{% import "_macros.html.twig" as ui %}
+
+{% block title %}Checkpoints voor {{ mapTime.map.name }}{% endblock %}
+
+{% block body %}
+<div class="container" style="margin-top: 50px; font-family: sans-serif;">
+    <h1><a href="{{ path('app_map_times', { 'name': mapTime.map.name }) }}">{{ mapTime.map.name }}</a></h1>
+
+    <a href="{{ path('app_player', { 'steamId': mapTime.player.steamId }) }}" class="player-name-link">
+        <strong>{{ ui.flag(mapTime.player.country) }} {{ mapTime.player.name }}</strong>
+    </a>
+    {% set wrCheckpoints = wrTime ? wrTime.checkpoints : [] %}
+
+    {% if mapTime.map.isLinear %}
+    <table class="leaderboard-table">
+        <thead>
+            <tr>
+                <th>Checkpoint</th>
+                <th>Time</th>
+                <th>Diff WR</th>
+                <th>Speed</th>
+                <th>Diff WR</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cp in mapTime.checkpoints %}
+                {% set wrCp = wrCheckpoints[loop.index0] ?? null %}
+                <tr>
+                    <td><strong>#{{ loop.index }}</strong></td>
+                    <td><code>{{ cp.getFormattedTime() }}</code></td> 
+                    <td>{{ ui.format_diff(cp.runTime, wrCp.runTime) }}</td>
+                    <td>{{ cp.getHorizontalStartSpeed() }} u/s</td>
+                    <td>{{ ui.format_speed_diff(cp.getHorizontalStartSpeed(), wrCp.getHorizontalStartSpeed()) }}</td>
+
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5" class="no-results">No checkpoint data</td>
+                </tr>
+            {% endfor %}
+                <tr>
+                    <td><strong>Finish</strong></td>
+                    <td><code>{{ mapTime.formattedTime }}</code></td> 
+                    <td>{{ ui.format_diff(mapTime.runTime, wrTime.runTime) }}</td>
+                    <td>{{ mapTime.endSpeed }} u/s</td>
+                    <td>{{ ui.format_speed_diff(mapTime.getEndSpeed(), wrTime.getEndSpeed()) }}</td>
+                </tr>
+        </tbody>
+    </table>
+    {% else %}
+        <table class="leaderboard-table">
+            <thead>
+                <tr>
+                    <th>Stage</th>
+                    <th>Time</th>
+                    <th>Diff WR</th>
+                    <th>Attempts</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cp in mapTime.checkpoints %}
+                    {% set wrCp = wrCheckpoints[loop.index0] ?? null %}
+                    <tr>
+                        <td><strong>Stage #{{ loop.index }}</strong></td>
+                        <td><code>{{ cp.getFormattedTime() }}</code></td> 
+                        <td>{{ ui.format_diff(cp.runTime, wrCp.runTime) }}</td>
+                        <td>{{ cp.attempts }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="5" class="no-results">No checkpoint data</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+</div>
+{% endblock %}

@@ -8,3 +8,36 @@
             <span>{{ country_code }}</span>
         {% endif %}
 {% endmacro %}
+
+
+{% macro format_diff(playerTicks, wrTicks) %}
+    {% set diffTicks = playerTicks - wrTicks %}
+    
+    {% if diffTicks <= 0 %}
+        <span style="color: #28a745; font-weight: bold;">
+            {{ diffTicks == 0 ? '0.000s' : (diffTicks / 64)|number_format(3) ~ 's' }}
+        </span>
+    {% else %}
+        {% set totalSeconds = diffTicks / 64 %}
+        <span style="color: #dc3545; font-weight: bold;">
+            {% set minutes = (totalSeconds / 60)|round(0, 'floor') %}
+            {% set remainingSeconds = totalSeconds % 60 %}
+            {% set milliseconds = ((totalSeconds - totalSeconds|round(0, 'floor')) * 1000)|round(0) %}
+            
+            +{{ "%02d:%02d.%03d"|format(minutes, remainingSeconds|round(0, 'floor'), milliseconds) }}
+        </span>
+    {% endif %}
+{% endmacro %}
+
+
+{% macro format_speed_diff(playerSpeed, wrSpeed) %}
+    {% set diffSpeed = playerSpeed - wrSpeed %}
+    
+    {% if diffSpeed > 0 %}
+        <span style="color: #28a745; font-weight: bold;">+{{ diffSpeed|round }} u/s</span>
+    {% elseif diffSpeed < 0 %}
+        <span style="color: #dc3545; font-weight: bold;">{{ diffSpeed|round }} u/s</span>
+    {% else %}
+        <span style="color: #888;">±0 u/s</span>
+    {% endif %}
+{% endmacro %}
