@@ -33,7 +33,7 @@
                 {% for player in players %}
                     <tr>
                         <td>
-                            <a href="{{ path('app_player_times', { 'steamId': player.steamId }) }}" class="player-name-link">
+                            <a href="{{ path('app_player', { 'steamId': player.steamId }) }}" class="player-name-link">
                                 <strong>{{ ui.flag(player.country) }} {{ player.name }}</strong>
                             </a>
                         </td>
@@ -60,7 +60,7 @@
                         {% set country = activity.player.country == 'LL' ? 'BE' : activity.player.country %}
                         {{ ui.flag(country) }}
                         
-                        <a href="{{ path('app_player_times', { 'steamId': activity.player.steamId }) }}" class="player-name-link">
+                        <a href="{{ path('app_player', { 'steamId': activity.player.steamId }) }}" class="player-name-link">
                             <strong>{{ activity.player.name }}</strong>
                         </a>
                         

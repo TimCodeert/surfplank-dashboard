@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
+use App\Repository\AchievementRepository;
+use App\Repository\MapTimeRepository;
 use App\Repository\PlayerRepository;
+use App\Service\Achievement\AchievementManager;
 use App\Mapper\PlayerPaginationMapper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,5 +31,37 @@ class PlayerController extends AbstractController
         $viewData = $paginationMapper->map($paginator, $page, $limit, $sort, $direction, $search);
 
         return $this->render('players/index.html.twig', $viewData);
+    }
+    
+    #[Route('/player/{steamId}', name: 'app_player')]
+    public function player(
+        int $steamId,
+        MapTimeRepository $timeRepository,
+        PlayerRepository $playerRepository,
+        AchievementRepository $achievementRepository,
+        AchievementManager $achievementManager,
+        ): Response
+    {
+        $player = $playerRepository->findPlayerBySteamId($steamId);
+        
+        if (!$player) {
+            throw $this->createNotFoundException('Player not found');
+        }
+
+        $achievementManager->checkAllForPlayer($player);
+        $unlocked = $achievementRepository->findUnlockedKeysForPlayer($player);
+
+        $times = $timeRepository->findTimesForPlayer($player->getId());
+
+        $mainTimes = array_filter($times, fn($time) => !$time->isBonus());
+        $bonusTimes = array_filter($times, fn($time) => $time->isBonus());
+
+        return $this->render('players/times.html.twig', [
+            'player' => $player,
+            'mainTimes' => $mainTimes,
+            'bonusTimes' => $bonusTimes,
+            'unlockedKeys' => $unlocked,
+            'achievements' => $achievementManager->getDefinitions()
+        ]);
     }
 }

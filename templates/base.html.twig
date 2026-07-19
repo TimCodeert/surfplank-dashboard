@@ -32,9 +32,24 @@
         <script src="https://cdn.jsdelivr.net/npm/idiomorph"></script>
         <script src="https://cdn.jsdelivr.net/npm/frankenphp-hot-reload/+esm" type="module"></script>
         {% endif %}
+
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
+        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
     </head>
     <body>
         {{ include('_navbar.html.twig') }}
         {% block body %}{% endblock %}
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const tables = document.querySelectorAll('.js-sortable-table');
+                tables.forEach(table => {
+                    new simpleDatatables.DataTable(table, {
+                        searchable: true,
+                        perPage: 10,
+                    });
+                });
+            });
+        </script>
+
     </body>
 </html>

@@ -2,11 +2,8 @@
 
 namespace App\Controller;
 
-use App\Repository\AchievementRepository;
 use App\Repository\MapRepository;
 use App\Repository\MapTimeRepository;
-use App\Repository\PlayerRepository;
-use App\Service\Achievement\AchievementManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -29,30 +26,4 @@ class MapTimeController extends AbstractController
         ]);
     }
 
-    #[Route('/player/{steamId}/times', name: 'app_player_times')]
-    public function playerTimes(
-        int $steamId,
-        MapTimeRepository $timeRepository,
-        PlayerRepository $playerRepository,
-        AchievementRepository $achievementRepository,
-        AchievementManager $achievementManager,
-        ): Response
-    {
-        $player = $playerRepository->findPlayerBySteamId($steamId);
-        
-        if (!$player) {
-            throw $this->createNotFoundException('Player not found');
-        }
-
-        $achievementManager->checkAllForPlayer($player);
-        $times = $timeRepository->findTimesForPlayer($player->getId());
-        $unlocked = $achievementRepository->findUnlockedKeysForPlayer($player);
-
-        return $this->render('players/times.html.twig', [
-            'player' => $player,
-            'times' => $times,
-            'unlockedKeys' => $unlocked,
-            'achievements' => $achievementManager->getDefinitions()
-        ]);
-    }
 }

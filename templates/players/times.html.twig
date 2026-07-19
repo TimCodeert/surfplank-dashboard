@@ -1,25 +1,25 @@
 {% extends 'base.html.twig' %}
 {% import "_macros.html.twig" as ui %}
 
-{% block title %}Times for {{ player.name }}{% endblock %}
+{% block title %}Profile {{ player.name }}{% endblock %}
 
 {% block body %}
 <div class="container" style="margin-top: 50px; font-family: sans-serif;">
     <h1>{{ player.name }} {{ ui.flag(player.country) }}</h1>
-    <table class="leaderboard-table">
+    <h2>Main map</h2>
+    <table class="leaderboard-table js-sortable-table">
         <thead>
             <tr>
                 <th>Rank</th>
                 <th>Map</th>
                 <th>Stage</th>
-                <th>Type</th>
                 <th>Time</th>
                 <th>Start Speed</th>
                 <th>End Speed</th>
             </tr>
         </thead>
         <tbody>
-            {% for time in times %}
+            {% for time in mainTimes %}
                 {% set rank = time.rankedData.worldwideRank %}
                 {% set completions = time.rankedData.totalCompletions %}
 
@@ -34,7 +34,6 @@
                             <strong>{{ time.map.name }}</strong>
                         </a>
                     </td>
-                    <td>{{ time.isBonus ? 'Bonus ' ~ time.bonusNumber : 'Main Run' }}</td>
                     <td>
                         {{ time.map.isLinear ? 'Linear' : time.map.stages ~ ' Stages' }}
                     </td>
@@ -44,7 +43,50 @@
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="4" class="no-results">This player has not set any times yet.</td>
+                    <td colspan="6" class="no-results">This player has not set any times yet.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Bonus</h2>
+    <table class="leaderboard-table js-sortable-table">
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Map</th>
+                <th>Stage</th>
+                <th>Time</th>
+                <th>Start Speed</th>
+                <th>End Speed</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for time in bonusTimes %}
+                {% set rank = time.rankedData.worldwideRank %}
+                {% set completions = time.rankedData.totalCompletions %}
+
+                <tr>
+                    <td>
+                        <span style="font-weight: bold; color: {{ rank == 1 ? '#d4af37' : (rank == 2 ? '#aaa' : (rank == 3 ? '#cd7f32' : '#333')) }}">
+                            #{{ rank }} / {{ completions }}
+                        </span>
+                    </td>
+                    <td>
+                        <a href="{{ path('app_map_times', { 'name': time.map.name }) }}" class="player-name-link">
+                            <strong>{{ time.map.name }}</strong>
+                        </a>
+                    </td>
+                    <td>
+                        {{ time.map.isLinear ? 'Linear' : time.map.stages ~ ' Stages' }}
+                    </td>
+                    <td><code>{{ time.formattedTime }}</code></td>
+                    <td>{{ time.startSpeed }}</td>
+                    <td>{{ time.endSpeed }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6" class="no-results">This player has not set any times yet.</td>
                 </tr>
             {% endfor %}
         </tbody>
