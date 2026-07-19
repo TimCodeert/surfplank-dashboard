@@ -93,6 +93,19 @@ class MapTimeRepository extends ServiceEntityRepository
     }
 
     /**
+     * Get WR times
+     * @return MapTime[]
+     */
+    public function getWorldRecords(): array
+    {
+        return $this->createQueryBuilder('mt')
+            ->join('mt.rankedData', 'rd')
+            ->andWhere('rd.worldwideRank = 1')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
      * Get the latest activities on the server
      * @param int $limit
      * @return MapTime[]

@@ -29,7 +29,7 @@
                 <tr>
                     <td><strong>#{{ loop.index }}</strong></td>
                     <td><code>{{ cp.getFormattedTime() }}</code></td> 
-                    <td>{{ ui.format_diff(cp.runTime, wrCp.runTime) }}</td>
+                    <td><code>{{ ui.format_diff(cp.runTime, wrCp.runTime) }}</code></td>
                     <td>{{ cp.getHorizontalStartSpeed() }} u/s</td>
                     <td>{{ ui.format_speed_diff(cp.getHorizontalStartSpeed(), wrCp.getHorizontalStartSpeed()) }}</td>
 
@@ -42,7 +42,7 @@
                 <tr>
                     <td><strong>Finish</strong></td>
                     <td><code>{{ mapTime.formattedTime }}</code></td> 
-                    <td>{{ ui.format_diff(mapTime.runTime, wrTime.runTime) }}</td>
+                    <td><code>{{ ui.format_diff(mapTime.runTime, wrTime.runTime) }}</code></td>
                     <td>{{ mapTime.endSpeed }} u/s</td>
                     <td>{{ ui.format_speed_diff(mapTime.getEndSpeed(), wrTime.getEndSpeed()) }}</td>
                 </tr>
@@ -64,7 +64,7 @@
                     <tr>
                         <td><strong>Stage #{{ loop.index }}</strong></td>
                         <td><code>{{ cp.getFormattedTime() }}</code></td> 
-                        <td>{{ ui.format_diff(cp.runTime, wrCp.runTime) }}</td>
+                        <td><code>{{ ui.format_diff(cp.runTime, wrCp.runTime) }}</<code></td>
                         <td>{{ cp.attempts }}</td>
                     </tr>
                 {% else %}

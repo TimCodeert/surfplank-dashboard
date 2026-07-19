@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Mapper\TimesMapper;
 use App\Repository\AchievementRepository;
 use App\Repository\MapTimeRepository;
 use App\Repository\PlayerRepository;
@@ -15,6 +16,10 @@ use Presta\SitemapBundle\Sitemap\Url\UrlConcrete;
 
 class PlayerController extends AbstractController
 {
+    public function __construct(
+        private TimesMapper $timesMapper
+    ) {}
+
     #[Route('/players', name: 'app_players', options: ['sitemap' => ['priority' => 0.7, 'changefreq' => UrlConcrete::CHANGEFREQ_DAILY]])]
     public function index(
         PlayerRepository $playerRepository, 
@@ -52,14 +57,12 @@ class PlayerController extends AbstractController
         $unlocked = $achievementRepository->findUnlockedKeysForPlayer($player);
 
         $times = $timeRepository->findTimesForPlayer($player->getId());
-
-        $mainTimes = array_filter($times, fn($time) => !$time->isBonus());
-        $bonusTimes = array_filter($times, fn($time) => $time->isBonus());
+        $times = $this->timesMapper->map($times);
 
         return $this->render('players/times.html.twig', [
             'player' => $player,
-            'mainTimes' => $mainTimes,
-            'bonusTimes' => $bonusTimes,
+            'mainTimes' => $times['main'],
+            'bonusTimes' => $times['bonus'],
             'unlockedKeys' => $unlocked,
             'achievements' => $achievementManager->getDefinitions()
         ]);
