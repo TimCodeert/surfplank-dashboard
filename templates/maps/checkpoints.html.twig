@@ -72,6 +72,12 @@
                         <td colspan="5" class="no-results">No checkpoint data</td>
                     </tr>
                 {% endfor %}
+                <tr>
+                    <td><strong>Finish</strong></td>
+                    <td><code>{{ mapTime.formattedTime }}</code></td> 
+                    <td><code>{{ ui.format_diff(mapTime.runTime, wrTime.runTime) }}</code></td>
+                    <td></td>
+                </tr>
             </tbody>
         </table>
     {% endif %}
