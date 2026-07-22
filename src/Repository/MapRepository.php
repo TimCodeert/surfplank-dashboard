@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\Map;
+use App\Entity\MapTime;
+
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -52,4 +54,25 @@ class MapRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    /**
+     * 
+     * @param int $playerId
+     * @return Map[]
+     */
+    public function findUncompletedMapsForPlayer(int $playerId): array
+        {
+            return $this->createQueryBuilder('m')
+                ->leftJoin(
+                    MapTime::class, 
+                    'mt', 
+                    'WITH', 
+                    'mt.map = m.id AND mt.player = :playerId AND mt.type = 0'
+                )
+                ->where('mt.id IS NULL AND m.ranked = 1')
+                ->setParameter('playerId', $playerId)
+                ->orderBy('m.name', 'ASC')
+                ->getQuery()
+                ->getResult();
+        }
 }

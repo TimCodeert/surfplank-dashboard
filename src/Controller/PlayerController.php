@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Mapper\TimesMapper;
 use App\Repository\AchievementRepository;
+use App\Repository\MapRepository;
 use App\Repository\MapTimeRepository;
 use App\Repository\PlayerRepository;
 use App\Service\Achievement\AchievementManager;
@@ -41,6 +42,7 @@ class PlayerController extends AbstractController
     #[Route('/player/{steamId}', name: 'app_player')]
     public function player(
         int $steamId,
+        MapRepository $mapRepository,
         MapTimeRepository $timeRepository,
         PlayerRepository $playerRepository,
         AchievementRepository $achievementRepository,
@@ -58,11 +60,14 @@ class PlayerController extends AbstractController
 
         $times = $timeRepository->findTimesForPlayer($player->getId());
         $times = $this->timesMapper->map($times);
+        
+        $uncompletedMaps = $mapRepository->findUncompletedMapsForPlayer($player->getId());
 
         return $this->render('players/times.html.twig', [
             'player' => $player,
             'mainTimes' => $times['main'],
             'bonusTimes' => $times['bonus'],
+            'uncompletedMaps' => $uncompletedMaps,
             'unlockedKeys' => $unlocked,
             'achievements' => $achievementManager->getDefinitions()
         ]);

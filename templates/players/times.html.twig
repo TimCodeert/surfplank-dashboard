@@ -40,7 +40,7 @@
                         {{ time.map.isLinear ? 'Linear' : time.map.stages ~ ' Stages' }}
                     </td>
                     <td><code>{{ time.own.formattedTime }}</code></td>
-                    <td><code>{{ ui.format_diff(time.own.runTime, time.WR.runTime) }}</code></td>
+                    <td><code>{{ ui.format_diff(time.own.runTime, time.WR) }}</code></td>
                     <td>{{ time.own.startSpeed }}</td>
                     <td>{{ time.own.endSpeed }}</td>
                     <td>
@@ -63,7 +63,7 @@
             <tr>
                 <th>Rank</th>
                 <th>Map</th>
-                <th>Stage</th>
+                <th>Stage #</th>
                 <th>Time</th>
                 <th>Start Speed</th>
                 <th>End Speed</th>
@@ -86,7 +86,7 @@
                         </a>
                     </td>
                     <td>
-                        {{ time.map.isLinear ? 'Linear' : time.map.stages ~ ' Stages' }}
+                        {{ time.own.stage }}
                     </td>
                     <td><code>{{ time.own.formattedTime }}</code></td>
                     <td>{{ time.own.startSpeed }}</td>
@@ -99,6 +99,37 @@
             {% endfor %}
         </tbody>
     </table>
+
+
+    {% if uncompletedMaps is not empty %}
+    <h2>Uncompleted</h2>
+        <table class="leaderboard-table js-sortable-table">
+            <thead>
+                <tr>
+                    <th>Map Name</th>
+                    <th>Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for map in uncompletedMaps %}
+                    <tr>
+                        <td>
+                            <a href="{{ path('app_map_times', { 'name': map.name }) }}" class="player-name-link">
+                                <strong>{{ map.name }}</strong>
+                            </a>
+                        </td>
+                        <td>
+                            {% if map.isLinear %}
+                                <span class="badge badge-linear">Linear</span>
+                            {% else %}
+                                <span class="badge badge-staged">Staged</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
 
     <h2>Achievements</h2>
     <div class="achievements-grid">

@@ -11,7 +11,6 @@ class TimesMapper
     ) {}
 
     /**
-     * Transformeert de database resultaten naar een schone array voor de view.
      * 
      * @param MapTime[] $times
      */
@@ -44,7 +43,7 @@ class TimesMapper
 
             $data = [
                 'own' => $time,
-                'WR'  => $wr,
+                'WR'  => $wr->getRunTime(),
                 'map' => $time->getMap()
             ];
 
