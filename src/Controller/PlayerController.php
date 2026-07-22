@@ -9,6 +9,7 @@ use App\Repository\MapTimeRepository;
 use App\Repository\PlayerRepository;
 use App\Service\Achievement\AchievementManager;
 use App\Mapper\PlayerPaginationMapper;
+use App\Service\SteamProfileService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -47,6 +48,7 @@ class PlayerController extends AbstractController
         PlayerRepository $playerRepository,
         AchievementRepository $achievementRepository,
         AchievementManager $achievementManager,
+        SteamProfileService $steamProfileService,
         ): Response
     {
         $player = $playerRepository->findPlayerBySteamId($steamId);
@@ -60,11 +62,14 @@ class PlayerController extends AbstractController
 
         $times = $timeRepository->findTimesForPlayer($player->getId());
         $times = $this->timesMapper->map($times);
-        
+
         $uncompletedMaps = $mapRepository->findUncompletedMapsForPlayer($player->getId());
+
+        $avatarUrl = $steamProfileService->getAvatarUrl($player->getSteamId());
 
         return $this->render('players/times.html.twig', [
             'player' => $player,
+            'avatarUrl' => $avatarUrl,
             'mainTimes' => $times['main'],
             'bonusTimes' => $times['bonus'],
             'uncompletedMaps' => $uncompletedMaps,

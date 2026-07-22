@@ -1,3 +1,128 @@
+.player-header {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 30px;
+    background-color: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+
+    .player-avatar-wrapper {
+        position: relative;
+        display: inline-block;
+
+        .player-avatar {
+            width: 96px;
+            height: 96px;
+            border-radius: 10px;
+            border: 1px solid #333;
+            object-fit: cover;
+            display: block;
+        }
+
+        .status-indicator {
+            position: absolute;
+            bottom: -4px;
+            right: -4px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid #181818;
+            
+            &.is-online {
+                background-color: #28a745;
+            }
+
+            &.is-offline {
+                background-color: #6c757d;
+            }
+        }
+    }
+
+    .player-info {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        flex-grow: 1;
+
+        .player-title-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+
+            .player-name {
+                margin: 0;
+                font-size: 1.8rem;
+                font-weight: 700;
+                line-height: 1;
+            }
+
+            .steam-link {
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+                color: #888;
+                text-decoration: none;
+                font-size: 0.9rem;
+                transition: color 0.2s ease-in-out, opacity 0.2s ease-in-out;
+
+                img {
+                    width: 25px;
+                    height: 25px;
+                    object-fit: contain;
+                    display: block;
+                }
+
+                &:hover {
+                    color: #5d79ae;
+                    opacity: 0.8;
+                }
+            }
+        }
+
+        .player-stats-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            font-size: 0.9rem;
+            color: #aaa;
+
+            .meta-divider {
+                color: #444;
+            }
+
+            .meta-item {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+
+                .meta-label {
+                    color: #777;
+                }
+
+                .meta-value {
+                    color: #444;
+                    font-weight: 600;
+                }
+            }
+
+            .status-badge {
+                font-weight: 600;
+
+                &.online {
+                    color: #28a745;
+                }
+
+                &.offline {
+                    color: #888;
+                }
+            }
+        }
+    }
+}
+
 .leaderboard-table {
     width: 100%;
     border-collapse: collapse;

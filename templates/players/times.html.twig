@@ -5,7 +5,61 @@
 
 {% block body %}
 <div class="container" style="margin-top: 50px; font-family: sans-serif;">
-    <h1>{{ player.name }} {{ ui.flag(player.country) }}</h1>
+    <div class="player-header">
+        <div class="player-avatar-wrapper">
+            {% if avatarUrl %}
+                <img src="{{ avatarUrl }}" alt="{{ player.name }}" class="player-avatar">
+            {% else %}
+                <img src="https://avatars.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg" alt="Default Avatar" class="player-avatar">
+            {% endif %}
+
+            <span class="status-indicator {{ player.isOnline ? 'is-online' : 'is-offline' }}" 
+                title="{{ player.isOnline ? 'Online' : 'Offline' }}">
+            </span>
+        </div>
+
+        <div class="player-info">
+            <div class="player-title-row">
+                <h1 class="player-name">
+                    {{ player.name }} {{ ui.flag(player.country) }}
+                </h1>
+            </div>
+
+            <div class="player-stats-meta">
+                <div class="meta-item">
+                    <span class="meta-label">Status:</span>
+                    {% if player.isOnline %}
+                        <span class="status-badge online">In-Game</span>
+                    {% else %}
+                        <span class="status-badge offline">Last seen {{ player.lastSeenAgo }}</span>
+                    {% endif %}
+                </div>
+
+                <span class="meta-divider">•</span>
+
+                <div class="meta-item">
+                    <span class="meta-label">Member since:</span>
+                    <span class="meta-value">{{ player.joinDate|date('d/m/Y') }}</span>
+                </div>
+
+                <span class="meta-divider">•</span>
+
+                <div class="meta-item">
+                    <span class="meta-label">Visits:</span>
+                    <span class="meta-value">{{ player.connections }}</span>
+                </div>
+            </div>
+
+                            
+                <a href="https://steamcommunity.com/profiles/{{ player.steamId }}" 
+                target="_blank" 
+                rel="noopener" 
+                class="steam-link"
+                title="View Steam Profile">
+                <img src="https://cdn.iconscout.com/icon/free/png-256/free-steam-logo-icon-svg-download-png-1933796.png" alt="Steam Logo">
+                </a>
+        </div>
+    </div>
 
     <h2>Maps</h2>
     <div class="tab-buttons">
