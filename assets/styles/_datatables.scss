@@ -1,0 +1,47 @@
+.datatable-top, .datatable-bottom {
+    padding: 5px 0;
+}
+
+.datatable-pagination {
+    a,
+    button {
+        &:hover {
+            background-color: #5d79ae;
+            color: #fff;
+            border-color: #5d79ae;
+        }
+    }
+
+    .datatable-active {
+        a,
+        button {
+            &,
+            &:focus,
+            &:hover {
+                background-color: #5d79ae;
+                color: #fff;
+                border-color: #5d79ae;
+            }
+        }
+    }
+}
+
+.leaderboard-table th {
+    background-color: #e88d1a;
+    font-weight: 600;
+    color: white;
+}
+
+.datatable-table {
+    > thead,
+    > tbody,
+    > tfoot {
+        > tr {
+            > th,
+            > td {
+                vertical-align: middle;
+                padding: 5px 10px;
+            }
+        }
+    }
+}

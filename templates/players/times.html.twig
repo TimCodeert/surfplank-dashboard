@@ -26,12 +26,12 @@
             <tr>
                 <th>Rank</th>
                 <th>Map</th>
-                <th>Stage</th>
+                <th>Type</th>
                 <th>Time</th>
                 <th>Diff WR</th>
-                <th>Start Speed</th>
-                <th>End Speed</th>
-                <th>Checkpoints</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -54,12 +54,24 @@
                     </td>
                     <td><code>{{ time.own.formattedTime }}</code></td>
                     <td><code>{{ ui.format_diff(time.own.runTime, time.WR) }}</code></td>
-                    <td>{{ time.own.startSpeed }}</td>
-                    <td>{{ time.own.endSpeed }}</td>
+                    <td><code>{{ time.own.startSpeed }}u/s</code></td>
+                    <td><code>{{ time.own.endSpeed }}u/s</code></td>
                     <td>
-                        <a href="{{ path('app_player_map_checkpoints', { 'name': time.map.name, 'steamId': player.steamId }) }}" class="player-name-link">
-                            See checkpoints
-                        </a>
+                    <div class="action-buttons">
+                            <a href="{{ path('app_map_times', { 'name': time.map.name }) }}" 
+                            class="action-btn" 
+                            title="View map leaderboards"
+                            aria-label="View map leaderboards">
+                                🌍
+                            </a>
+
+                            <a href="{{ path('app_player_map_checkpoints', { 'name': time.map.name, 'steamId': player.steamId }) }}" 
+                            class="action-btn" 
+                            title="View checkpoints"
+                            aria-label="View checkpoints">
+                                🏁
+                            </a>
+                        </div>
                     </td>
                 </tr>
             {% else %}
