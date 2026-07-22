@@ -6,7 +6,21 @@
 {% block body %}
 <div class="container" style="margin-top: 50px; font-family: sans-serif;">
     <h1>{{ player.name }} {{ ui.flag(player.country) }}</h1>
-    <h2>Main map</h2>
+
+    <h2>Maps</h2>
+    <div class="tab-buttons">
+        <button type="button" class="tab-btn active" data-tab="main">
+            Main ({{ mainTimes|length }})
+        </button>
+        <button type="button" class="tab-btn" data-tab="bonus">
+            Bonus ({{ bonusTimes|length }})
+        </button>
+        <button type="button" class="tab-btn" data-tab="uncompleted">
+            Uncompleted ({{ uncompletedMaps|length }})
+        </button>
+    </div>
+
+<div class="tab-content active" id="tab-main">
     <table class="leaderboard-table js-sortable-table">
         <thead>
             <tr>
@@ -24,7 +38,6 @@
             {% for time in mainTimes %}
                 {% set rank = time.own.rankedData.worldwideRank %}
                 {% set completions = time.own.rankedData.totalCompletions %}
-
                 <tr>
                     <td>
                         <span style="font-weight: bold; color: {{ rank == 1 ? '#d4af37' : (rank == 2 ? '#aaa' : (rank == 3 ? '#cd7f32' : '#333')) }}">
@@ -51,13 +64,14 @@
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="6" class="no-results">This player has not set any times yet.</td>
+                    <td colspan="8" class="no-results">This player has not set any main times yet.</td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
+</div>
 
-    <h2>Bonus</h2>
+<div class="tab-content" id="tab-bonus" style="display: none;">
     <table class="leaderboard-table js-sortable-table">
         <thead>
             <tr>
@@ -73,7 +87,6 @@
             {% for time in bonusTimes %}
                 {% set rank = time.own.rankedData.worldwideRank %}
                 {% set completions = time.own.rankedData.totalCompletions %}
-
                 <tr>
                     <td>
                         <span style="font-weight: bold; color: {{ rank == 1 ? '#d4af37' : (rank == 2 ? '#aaa' : (rank == 3 ? '#cd7f32' : '#333')) }}">
@@ -85,24 +98,21 @@
                             <strong>{{ time.map.name }}</strong>
                         </a>
                     </td>
-                    <td>
-                        {{ time.own.stage }}
-                    </td>
+                    <td>{{ time.own.stage }}</td>
                     <td><code>{{ time.own.formattedTime }}</code></td>
                     <td>{{ time.own.startSpeed }}</td>
                     <td>{{ time.own.endSpeed }}</td>
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="6" class="no-results">This player has not set any times yet.</td>
+                    <td colspan="6" class="no-results">This player has not set any bonus times yet.</td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
+</div>
 
-
-    {% if uncompletedMaps is not empty %}
-    <h2>Uncompleted</h2>
+    <div class="tab-content" id="tab-uncompleted" style="display: none;">
         <table class="leaderboard-table js-sortable-table">
             <thead>
                 <tr>
@@ -129,7 +139,7 @@
                 {% endfor %}
             </tbody>
         </table>
-    {% endif %}
+    </div>
 
     <h2>Achievements</h2>
     <div class="achievements-grid">
@@ -151,4 +161,21 @@
         {% endfor %}
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const buttons = document.querySelectorAll('.tab-btn');
+        const contents = document.querySelectorAll('.tab-content');
+
+        buttons.forEach(button => {
+            button.addEventListener('click', function () {
+                const targetTab = this.getAttribute('data-tab');
+                buttons.forEach(btn => btn.classList.remove('active'));
+                contents.forEach(content => content.style.display = 'none');
+                this.classList.add('active');
+                document.getElementById('tab-' + targetTab).style.display = 'block';
+            });
+        });
+    });
+</script>
 {% endblock %}
