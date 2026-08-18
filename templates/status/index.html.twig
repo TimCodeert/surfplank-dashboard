@@ -72,10 +72,7 @@
                         
                         on              
 
-                        <a href="{{ path('app_map_times', { 'name': activity.map.name }) }}" class="map-link">
-                            <strong>{{ activity.map.name }}</strong>
-                        </a>
-
+                        <a href="{{ path('app_map_times', { 'name': activity.map.name }) }}" class="map-link"><strong>{{ activity.map.name }}</strong></a>                  
                         with a time of <strong>[{{ activity.runTime|format_ticks }}]</strong>
                     </div>
                     

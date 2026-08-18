@@ -37,6 +37,10 @@ class Player
     #[ORM\Column(type: 'string', length: 45)]
     private string $ipAddress;
 
+    #[ORM\OneToOne(targetEntity: PlayerRank::class, fetch: 'EAGER')]    
+    #[ORM\JoinColumn(name: 'id', referencedColumnName: 'player_id', nullable: true)]
+    private ?PlayerRank $rank = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -83,6 +87,11 @@ class Player
     public function getIpAddress(): string
     {
         return $this->ipAddress;
+    }
+
+    public function getRank(): ?PlayerRank
+    {
+        return $this->rank;
     }
 
     public function getLastSeenAgo(): string

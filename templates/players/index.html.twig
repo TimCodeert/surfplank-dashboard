@@ -40,6 +40,7 @@
                 <th>{{ sortHelper.sortLink('lastSeen', 'Last Seen', currentSort, currentDirection, currentSearch) }}</th>
                 <th>{{ sortHelper.sortLink('connections', 'Visits', currentSort, currentDirection, currentSearch) }}</th>
                 <th>{{ sortHelper.sortLink('completions', 'Completions', currentSort, currentDirection, currentSearch) }}</th>
+                <th>{{ sortHelper.sortLink('points', 'Points', currentSort, currentDirection, currentSearch) }}</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -62,6 +63,13 @@
                     <td>{{ player.connections }}</td>
                     <td>
                         <span class="badge bg-secondary">{{ player.completionsCount }} runs</span>
+                    </td>
+                    <td>
+                        {% if player.completionsCount %}
+                            {{ player.rank.totalPoints }}
+                        {% else %}
+                            0
+                        {% endif %}
                     </td>
                     <td>
                         <a href="https://steamcommunity.com/profiles/{{ player.steamId }}/" target="_blank" rel="noopener noreferrer" class="steam-link">

@@ -18,6 +18,18 @@ class PlayerRepository extends ServiceEntityRepository
     }
 
     /**
+     * Get total players
+     * @return int
+     */
+    public function countPlayers(): int
+    {
+        return $this->createQueryBuilder('p')
+            ->select('count(p.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    /**
      * Get online players
      * @return Player[]
      */
@@ -26,6 +38,23 @@ class PlayerRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('p')
             ->andWhere('p.isOnline = :onlineStatus')
             ->setParameter('onlineStatus', true)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Get players grouped by country
+     *
+     * @return array<int, array{country: string, count: int}>
+     */
+    public function getPlayerCountByCountry(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->select('p.country AS country, COUNT(p.id) AS count')
+            ->where('p.country IS NOT NULL')
+            ->andWhere("p.country != ''")
+            ->groupBy('p.country')
+            ->orderBy('count', 'DESC')
             ->getQuery()
             ->getResult();
     }
@@ -43,37 +72,40 @@ class PlayerRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    public function findPaginatedPlayers(int $page, int $limit, string $sort, string $direction, ?string $search): Paginator
-    {
-        $qb = $this->createQueryBuilder('p');
-
-        // Calculate completions
-        $qb->select('p AS player')
-            ->addSelect('(
-            SELECT COUNT(mt.id) 
-            FROM App\Entity\MapTime mt 
-            JOIN mt.map m 
-            WHERE mt.player = p.id 
-                AND mt.type = 0 
-                AND mt.stage = 0 
-                AND m.ranked = 1
-        ) AS completions');
+    public function findPaginatedPlayers(
+        int $page = 1, 
+        int $limit = 40, 
+        string $sort = 'lastSeen', 
+        string $direction = 'DESC', 
+        ?string $search = null
+    ): Paginator {
+        $qb = $this->createQueryBuilder('p')
+            ->select('p AS player', 'COALESCE(r.totalPoints, 0) AS totalPoints', 'COALESCE(r.totalFinishedMaps, 0) AS completions', 'COALESCE(r.rankTitle, \'Newbie\') AS rankTitle')
+            ->leftJoin('p.rank', 'r');
 
         if ($search) {
             $qb->andWhere('p.name LIKE :search')
-               ->setParameter('search', '%' . $search . '%');
+            ->setParameter('search', '%' . $search . '%');
         }
 
-        $allowedSortColumns = ['name' => 'p.name', 'country' => 'p.country', 'lastSeen' => 'p.lastSeen', 'connections' => 'p.connections', 'completions' => 'completions'];
+        $allowedSortColumns = [
+            'name'        => 'p.name',
+            'country'     => 'p.country',
+            'lastSeen'    => 'p.lastSeen',
+            'connections' => 'p.connections',
+            'completions' => 'completions',
+            'points'      => 'totalPoints',
+        ];
+
         $sortOrder = $allowedSortColumns[$sort] ?? 'p.lastSeen';
         $direction = strtoupper($direction) === 'ASC' ? 'ASC' : 'DESC';
 
         $qb->orderBy($sortOrder, $direction);
 
         $qb->setFirstResult(($page - 1) * $limit)
-           ->setMaxResults($limit);
+        ->setMaxResults($limit);
 
-        return new Paginator($qb->getQuery(), true);
+        return new Paginator($qb->getQuery(), false);
     }
 
 }

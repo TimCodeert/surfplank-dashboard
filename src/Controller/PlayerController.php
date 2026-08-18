@@ -30,7 +30,7 @@ class PlayerController extends AbstractController
     ): Response {
         $page      = $request->query->getInt('page', 1);
         $search    = $request->query->get('search', null);
-        $sort      = $request->query->get('sort', 'lastSeen');
+        $sort      = $request->query->get('sort', 'points');
         $direction = $request->query->get('direction', 'desc');
         $limit     = 40;
 
