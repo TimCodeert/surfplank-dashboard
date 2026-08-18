@@ -24,6 +24,9 @@ class PlayerRank
     #[ORM\Column(name: 'rank_title', type: 'string')]
     private string $rankTitle;
 
+    #[ORM\Column(name: 'position', type: 'integer')]
+    private int $position;
+
     public function getId(): string
     {
         return $this->id;
@@ -47,5 +50,10 @@ class PlayerRank
     public function getRankTitle(): string
     {
         return $this->rankTitle;
+    }
+
+    public function getPosition(): int
+    {
+        return $this->position;
     }
 }

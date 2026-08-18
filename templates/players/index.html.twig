@@ -35,6 +35,7 @@
     <table class="leaderboard-table">
         <thead>
             <tr>
+                <th>{{ sortHelper.sortLink('points', 'Rank', currentSort, currentDirection, currentSearch) }}</th>
                 <th>{{ sortHelper.sortLink('name', 'Name', currentSort, currentDirection, currentSearch) }}</th>
                 <th>{{ sortHelper.sortLink('country', 'Country', currentSort, currentDirection, currentSearch) }}</th>
                 <th>{{ sortHelper.sortLink('lastSeen', 'Last Seen', currentSort, currentDirection, currentSearch) }}</th>
@@ -47,6 +48,13 @@
         <tbody>
             {% for player in players %}
                 <tr>
+                    <td>
+                        {% if player.completionsCount %}
+                            {{player.rank.position}}
+                        {% else %}
+                            #
+                        {% endif %}
+                    </td>
                     <td>
                         <a href="{{ path('app_player', { 'steamId': player.steamId }) }}" class="player-name-link">
                             <strong>{{ player.name }}</strong>

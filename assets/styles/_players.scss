@@ -83,11 +83,17 @@
 
         .player-stats-meta {
             display: flex;
-            align-items: center;
-            gap: 12px;
-            flex-wrap: wrap;
+            flex-direction: column;
+            gap: 6px;
             font-size: 0.9rem;
             color: #aaa;
+
+            .meta-row {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                flex-wrap: wrap;
+            }
 
             .meta-divider {
                 color: #444;
@@ -103,7 +109,7 @@
                 }
 
                 .meta-value {
-                    color: #444;
+                    color: black;
                     font-weight: 600;
                 }
             }

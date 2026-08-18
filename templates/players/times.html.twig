@@ -6,9 +6,11 @@
 {% if mainTimes|length > 0 %}
     {% set ranktitle = player.rank.ranktitle %}
     {% set totalPoints = player.rank.totalPoints %}
+    {% set position = player.rank.position %}
 {% else %}
     {% set ranktitle = 'Unranked' %}
     {% set totalPoints = 0 %}
+    {% set position = '#' %}
 {% endif %}
 {% block body %}
 <div class="container" style="margin-top: 50px; font-family: sans-serif;">
@@ -29,45 +31,7 @@
             <div class="player-title-row">
                 <h1 class="player-name">
                     {{ ui.flag(player.country) }} {{ player.name }}
-                </h1>
-            </div>
-
-            <div class="player-stats-meta">
-                <div class="meta-item">
-                    <span class="meta-label">Rank:</span>
-                    <span class="meta-value">{{ ranktitle }}</span>
-                </div>
-
-                <div class="meta-item">
-                    <span class="meta-label">Points:</span>
-                    <span class="meta-value">{{ totalPoints }}</span>
-                </div>
-
-                <div class="meta-item">
-                    <span class="meta-label">Status:</span>
-                    {% if player.isOnline %}
-                        <span class="status-badge online">In-Game</span>
-                    {% else %}
-                        <span class="status-badge offline">Last seen {{ player.lastSeenAgo }}</span>
-                    {% endif %}
-                </div>
-
-                <span class="meta-divider">•</span>
-
-                <div class="meta-item">
-                    <span class="meta-label">Member since:</span>
-                    <span class="meta-value">{{ player.joinDate|date('d/m/Y') }}</span>
-                </div>
-
-                <span class="meta-divider">•</span>
-
-                <div class="meta-item">
-                    <span class="meta-label">Visits:</span>
-                    <span class="meta-value">{{ player.connections }}</span>
-                </div>
-            </div>
-
-                            
+                </h1>                        
                 <a href="https://steamcommunity.com/profiles/{{ player.steamId }}" 
                 target="_blank" 
                 rel="noopener" 
@@ -75,6 +39,65 @@
                 title="View Steam Profile">
                 <img src="https://cdn.iconscout.com/icon/free/png-256/free-steam-logo-icon-svg-download-png-1933796.png" alt="Steam Logo">
                 </a>
+            </div>
+
+            <div class="player-stats-meta">
+                <div class="meta-row">
+                    <div class="meta-item">
+                        <span class="meta-label">Rank:</span>
+                        <span class="meta-value">
+                            {% if position == 1 %}
+                                <span>🥇 #1</span>
+                            {% elseif position == 2 %}
+                                <span>🥈 #2</span>
+                            {% elseif position == 3 %}
+                                <span>🥉 #3</span>
+                            {% else %}
+                                <span class="text-muted">#{{ position }}</span>
+                            {% endif %}
+                        </span>
+                    </div>
+
+                    <span class="meta-divider">•</span>
+
+                    <div class="meta-item">
+                        <span class="meta-label">Title:</span>
+                        <span class="meta-value">{{ ranktitle }}</span>
+                    </div>
+
+                    <span class="meta-divider">•</span>
+
+                    <div class="meta-item">
+                        <span class="meta-label">Points:</span>
+                        <span class="meta-value">{{ totalPoints }}</span>
+                    </div>
+                </div>
+
+                <div class="meta-row">
+                    <div class="meta-item">
+                        <span class="meta-label">Status:</span>
+                        {% if player.isOnline %}
+                            <span class="status-badge online">In-Game</span>
+                        {% else %}
+                            <span class="status-badge offline">Last seen {{ player.lastSeenAgo }}</span>
+                        {% endif %}
+                    </div>
+
+                    <span class="meta-divider">•</span>
+
+                    <div class="meta-item">
+                        <span class="meta-label">Member since:</span>
+                        <span class="meta-value">{{ player.joinDate|date('d/m/Y') }}</span>
+                    </div>
+
+                    <span class="meta-divider">•</span>
+
+                    <div class="meta-item">
+                        <span class="meta-label">Visits:</span>
+                        <span class="meta-value">{{ player.connections }}</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
