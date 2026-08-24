@@ -84,7 +84,7 @@ class MapTime
 
     public function isBonus(): bool
     {
-        return $this->type > 0;
+        return $this->type === 1;
     }
 
     public function getBonusNumber(): ?int
