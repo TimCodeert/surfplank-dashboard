@@ -72,6 +72,7 @@ class PlayerController extends AbstractController
             'avatarUrl' => $avatarUrl,
             'mainTimes' => $times['main'],
             'bonusTimes' => $times['bonus'],
+            'stageRecords' => $times['stage'],
             'uncompletedMaps' => $uncompletedMaps,
             'unlockedKeys' => $unlocked,
             'achievements' => $achievementManager->getDefinitions()

@@ -87,6 +87,11 @@ class MapTime
         return $this->type === 1;
     }
 
+    public function isStageRecord(): bool
+    {
+        return $this->type === 2;
+    }
+
     public function getBonusNumber(): ?int
     {
         return $this->isBonus() ? $this->stage : null;

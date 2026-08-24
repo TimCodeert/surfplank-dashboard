@@ -106,6 +106,9 @@
         <button type="button" class="tab-btn active" data-tab="main">
             Main ({{ mainTimes|length }})
         </button>
+        <button type="button" class="tab-btn" data-tab="stages">
+            Stages ({{ stageRecords|length }})
+        </button>
         <button type="button" class="tab-btn" data-tab="bonus">
             Bonus ({{ bonusTimes|length }})
         </button>
@@ -171,6 +174,44 @@
             {% else %}
                 <tr>
                     <td colspan="8" class="no-results">This player has not set any main times yet.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="tab-content" id="tab-stages" style="display: none;">
+    <table class="leaderboard-table js-sortable-table">
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Map</th>
+                <th>Stage #</th>
+                <th>Time</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            {% for time in stageRecords %}
+                {% set rank = time.rankedData.worldwideRank %}
+                {% set completions = time.rankedData.totalCompletions %}
+                <tr>
+                    <td>
+                        <span style="font-weight: bold; color: {{ rank == 1 ? '#d4af37' : (rank == 2 ? '#aaa' : (rank == 3 ? '#cd7f32' : '#333')) }}">
+                            #{{ rank }} / {{ completions }}
+                        </span>
+                    </td>
+                    <td>
+                        <a href="{{ path('app_map_times', { 'name': time.map.name }) }}" class="player-name-link">
+                            <strong>{{ time.map.name }}</strong>
+                        </a>
+                    </td>
+                    <td>{{ time.stage }}</td>
+                    <td><code>{{ time.formattedTime }}</code></td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6" class="no-results">This player has not set any bonus times yet.</td>
                 </tr>
             {% endfor %}
         </tbody>

@@ -18,6 +18,7 @@ class TimesMapper
     {
         $mainTimes = [];
         $bonusTimes = [];
+        $stageRecords = [];
         
         $worldRecords = $this->mapTimeRepository->getWorldRecords();
         $indexedWorldRecords = [];
@@ -49,7 +50,10 @@ class TimesMapper
 
             if ($time->isBonus()) {
                 $bonusTimes[] = $data;
-            } else {
+            } elseif ($time->isStageRecord()) {
+                $stageRecords[] = $time;
+            }
+            else {
                 $mainTimes[] = $data;
             }
         }
@@ -57,6 +61,7 @@ class TimesMapper
         return [
             'main' => $mainTimes,
             'bonus' => $bonusTimes,
+            'stage' => $stageRecords,
         ];
     }
 }
