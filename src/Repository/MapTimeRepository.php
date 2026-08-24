@@ -18,6 +18,18 @@ class MapTimeRepository extends ServiceEntityRepository
     }
 
     /**
+     * Get total maptimes
+     * @return int
+     */
+    public function countMapTimes(): int
+    {
+        return $this->createQueryBuilder('mp')
+            ->select('count(mp.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    /**
      * Get the leaderboard for a specific map (sorted by fastest time)
      * @return MapTime[]
      */
@@ -55,21 +67,18 @@ class MapTimeRepository extends ServiceEntityRepository
     }
     /**
      * Get time for player
-     * @return ?MapTime
+     * @return MapTime[]
      */
-    public function findTimeForPlayer(int $playerId, string $mapName): ?MapTime
+    public function findTimeForPlayer(int $playerId, string $mapName): array
     {
         return $this->createQueryBuilder('mt')
             ->join('mt.map', 'm')
             ->where('mt.player = :playerId')
             ->andWhere('m.name = :mapName')
-            ->andWhere('mt.type = :type')
             ->setParameter('playerId', $playerId)
             ->setParameter('mapName', $mapName)
-            ->setParameter('type', 0)
-            ->setMaxResults(1)
             ->getQuery()
-            ->getOneOrNullResult();
+            ->getResult();
     }
 
     /**

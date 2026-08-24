@@ -26,7 +26,6 @@ class MapTimeController extends AbstractController
             'times' => $times,
         ]);
     }
-
     #[Route('/map/{name}/{steamId}/checkpoints', name: 'app_player_map_checkpoints')]
     public function mapCheckpoints(
         string $name, 
@@ -40,21 +39,39 @@ class MapTimeController extends AbstractController
             throw $this->createNotFoundException('Player not found');
         }
 
-        $mapTime = $timeRepository->findTimeForPlayer($player->getId(), $name);
+        $allTimes = $timeRepository->findTimeForPlayer($player->getId(), $name);
 
-        if (!$mapTime) {
-            throw $this->createNotFoundException('No time found');
+        if (empty($allTimes)) {
+            throw $this->createNotFoundException('No times found for this player on this map');
         }
 
-        $wrTime = $timeRepository->findWorldRecord(
-                    $mapTime->getMap()->getId(),
-                    $mapTime->getType(),
-                    $mapTime->getStage()
-                );
+        $mapTime = null;
+        $stageTimes = [];
+
+        foreach ($allTimes as $time) {
+            if ($time->getType() === 0) {
+                $mapTime = $time;
+            } 
+            elseif ($time->getType() === 2) {
+                $stageTimes[$time->getStage() - 1] = $time->getFormattedTime();
+            }
+        }
+
+        ksort($stageTimes);
+
+        $wrTime = null;
+        if ($mapTime) {
+            $wrTime = $timeRepository->findWorldRecord(
+                $mapTime->getMap()->getId(),
+                $mapTime->getType(),
+                $mapTime->getStage()
+            );
+        }
 
         return $this->render('maps/checkpoints.html.twig', [
-            'mapTime'     => $mapTime,
-            'wrTime'      => $wrTime,
+            'mapTime'    => $mapTime,
+            'stageTimes' => $stageTimes,
+            'wrTime'     => $wrTime,
         ]);
     }
 
