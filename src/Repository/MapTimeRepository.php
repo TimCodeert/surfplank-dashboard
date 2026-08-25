@@ -115,6 +115,33 @@ class MapTimeRepository extends ServiceEntityRepository
     }
 
     /**
+     * Get all Stage World Records for a map (Type 2, Rank 1 per stage)
+     * @param int $mapId
+     * @return MapTime[] Indexed by stage number
+     */
+    public function findStageRecordsForMap(int $mapId): array
+    {
+        $records = $this->createQueryBuilder('mt')
+            ->select('mt', 'p', 'rd')
+            ->join('mt.player', 'p')
+            ->join('mt.rankedData', 'rd')
+            ->where('mt.map = :mapId')
+            ->andWhere('mt.type = 2') // Type 2 = Stage times
+            ->andWhere('rd.worldwideRank = 1') // WR van die specifieke stage
+            ->orderBy('mt.stage', 'ASC')
+            ->setParameter('mapId', $mapId)
+            ->getQuery()
+            ->getResult();
+
+        $indexedRecords = [];
+        foreach ($records as $record) {
+            $indexedRecords[$record->getStage()] = ['player' => $record->getPlayer(), 'time' => $record->getRunTime()];
+        }
+
+        return $indexedRecords;
+    }
+
+    /**
      * Get the latest activities on the server
      * @param int $limit
      * @return MapTime[]

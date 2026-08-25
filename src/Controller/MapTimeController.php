@@ -20,10 +20,12 @@ class MapTimeController extends AbstractController
         }
 
         $times = $timeRepository->findLeaderboardForMap($map->getId());
+        $stageWRs = $timeRepository->findStageRecordsForMap($map->getId());
 
         return $this->render('maps/times.html.twig', [
             'map' => $map,
             'times' => $times,
+            'stageWRs' => $stageWRs,
         ]);
     }
     #[Route('/map/{name}/{steamId}/checkpoints', name: 'app_player_map_checkpoints')]

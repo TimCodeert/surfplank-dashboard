@@ -6,7 +6,7 @@
 {% block body %}
 <div class="container">
     <h1>Leaderboard: {{ map.name }}</h1>
-    <p>Type: {{ map.isLinear ? 'Linear' : 'Staged' }}</p>
+    <h2>Times</h2>
 
     <table class="leaderboard-table">
         <thead>
@@ -34,5 +34,36 @@
             {% endfor %}
         </tbody>
     </table>
+
+    {% if not map.isLinear %}
+    <h2>Stage records</h2>
+    <table class="leaderboard-table">
+        <thead>
+            <tr>
+                <th>Stage</th>
+                <th>Player</th>
+                <th>Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for stageNumber, record in stageWRs %}
+                <tr>
+                    <td>#{{ stageNumber }}</td>
+                    <td>
+                        <a href="{{ path('app_player', { 'steamId': record.player.steamId }) }}" class="player-name-link">
+                            <strong>{{ ui.flag(record.player.country) }} {{ record.player.name }}</strong>
+                        </a>
+                    </td>
+                    <td><code>{{ ui.format_ticks(record.time) }}</code></td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="3" class="no-results">No stage records found</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% endif %}
 </div>
 {% endblock %}
