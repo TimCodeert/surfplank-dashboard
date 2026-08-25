@@ -9,6 +9,17 @@
         {% endif %}
 {% endmacro %}
 
+{% macro format_ticks(ticks, tickRate = 64) %}
+    {% set totalSeconds = ticks / tickRate %}
+    <code>
+        {% set minutes = (totalSeconds / 60)|round(0, 'floor') %}
+        {% set remainingSeconds = totalSeconds % 60 %}
+        {% set milliseconds = ((totalSeconds - totalSeconds|round(0, 'floor')) * 1000)|round(0) %}
+        
+        {{ "%02d:%02d.%03d"|format(minutes, remainingSeconds|round(0, 'floor'), milliseconds) }}
+    </code>
+{% endmacro %}
+
 
 {% macro format_diff(playerTicks, wrTicks) %}
     {% set diffTicks = playerTicks - wrTicks %}
