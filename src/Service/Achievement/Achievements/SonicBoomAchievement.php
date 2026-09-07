@@ -17,7 +17,7 @@ class SonicBoomAchievement implements AchievementInterface
 
     public function isQualified(Player $player): bool
     {
-        $times = $this->mapTimeRepository->findTimesForPlayer($player->getId());
+        $times = $this->mapTimeRepository->findMapTimesForPlayer($player->getId());
 
         foreach ($times as $time) {
             if ($time->getEndSpeed() >= 3500) {

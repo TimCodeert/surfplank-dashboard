@@ -65,6 +65,26 @@ class MapTimeRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();  
     }
+
+    /**
+     * Get all maptimes (excluding stage records, and bonuses) achieved by a specific player
+     * @return MapTime[]
+     */
+    public function findMapTimesForPlayer(int $playerId): array
+    {
+        return $this->createQueryBuilder('mt')
+            ->select('mt', 'rd')
+            ->join('mt.map', 'm')
+            ->join('mt.rankedData', 'rd')
+            ->where('mt.player = :playerId')
+            ->andWhere('m.ranked = :isRanked')
+            ->andWhere('mt.type = 0')
+            ->setParameter('playerId', $playerId)
+            ->setParameter('isRanked', true)
+            ->orderBy('rd.worldwideRank', 'ASC')
+            ->getQuery()
+            ->getResult();  
+    }
     /**
      * Get time for player
      * @return MapTime[]
@@ -130,7 +150,7 @@ class MapTimeRepository extends ServiceEntityRepository
             ->join('mt.rankedData', 'rd')
             ->where('mt.map = :mapId')
             ->andWhere('mt.type = 2') // Type 2 = Stage times
-            ->andWhere('rd.worldwideRank = 1') // WR van die specifieke stage
+            ->andWhere('rd.worldwideRank = 1')
             ->orderBy('mt.stage', 'ASC')
             ->setParameter('mapId', $mapId)
             ->getQuery()
