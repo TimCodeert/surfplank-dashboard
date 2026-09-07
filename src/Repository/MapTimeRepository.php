@@ -109,7 +109,10 @@ class MapTimeRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('mt')
             ->join('mt.rankedData', 'rd')
+            ->join('mt.map', 'm')
             ->andWhere('rd.worldwideRank = 1')
+            ->andWhere('mt.type = 0 OR mt.type = 1')
+            ->andWhere('m.ranked = 1')
             ->getQuery()
             ->getResult();
     }
