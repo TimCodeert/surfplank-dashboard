@@ -288,7 +288,7 @@
         </table>
     </div>
 
-    <h2>Achievements</h2>
+    <h2>Achievements ({{ unlockedKeys|length }} / {{ achievements|length }})</h2>
     <div class="achievements-grid">
         {% for achievement in achievements %}
             {% set isUnlocked = achievement.key in unlockedKeys %}

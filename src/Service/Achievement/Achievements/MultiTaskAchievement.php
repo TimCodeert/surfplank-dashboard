@@ -13,7 +13,7 @@ class MultiTaskAchievement implements AchievementInterface
 
     public function getKey(): string { return 'multi_task'; }
     public function getName(): string { return 'Multitask'; }
-    public function getDescription(): string { return 'Open your profile while being on the server.'; }
+    public function getDescription(): string { return 'Open this page while being on the server.'; }
 
     public function isQualified(Player $player): bool
     {
